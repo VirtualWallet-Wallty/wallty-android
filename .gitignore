@@ -1,5 +1,21 @@
-.gradle
-/local .properties
-/.idea
-/build
+# Gradle
+.gradle/
+build/
+
+# Local config
+local.properties
+
+# IDE
+.idea/
 *.iml
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Generated
+captures/
+.externalNativeBuild/
+.cxx/
