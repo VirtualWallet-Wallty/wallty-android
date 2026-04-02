@@ -1,62 +1,80 @@
-package com.krushkov.virtualwallet.ui.screens
-
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.krushkov.virtualwallet.viewmodel.AuthViewModel
-import com.krushkov.virtualwallet.viewmodel.AuthState
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
+fun LoginScreen(
+    viewModel: AuthViewModel = hiltViewModel(),
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit
+) {
 
-    val state by viewModel.authState.observeAsState(AuthState.Loading)
+    val state = viewModel.state
 
     var identifier by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column {
+    LaunchedEffect(state.isLoggedIn) {
+        if (state.isLoggedIn) {
+            onLoginSuccess()
+        }
+    }
 
-        TextField(
-            value = identifier,
-            onValueChange = { identifier = it },
-            label = { Text("Username or Email") }
-        )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
 
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") }
-        )
+        Text("Login", fontSize = 28.sp)
 
-        Button(onClick = {
-            viewModel.login(identifier, password)
-        }) {
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(identifier, { identifier = it }, label = { Text("Email") })
+        OutlinedTextField(password, { password = it }, label = { Text("Password") })
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = { viewModel.login(identifier, password) },
+            enabled = !state.isLoading,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Login")
         }
 
-        when (val currentState = state) {
+        TextButton(onClick = onNavigateToRegister) {
+            Text("Register")
+        }
 
-            is AuthState.Loading -> {
-                Text("Loading...")
-            }
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
 
-            is AuthState.Error -> {
-                Text(currentState.message)
-            }
-
-            is AuthState.Authenticated -> {
-                Text("Welcome ${currentState.user.username}")
-            }
-
-            else -> {}
+        state.error?.let {
+            Text(it, color = Color.Red)
         }
     }
 }

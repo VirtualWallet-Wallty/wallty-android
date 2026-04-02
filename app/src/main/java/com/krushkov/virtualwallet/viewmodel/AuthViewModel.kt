@@ -1,101 +1,75 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.krushkov.virtualwallet.data.api.ApiProvider
-import com.krushkov.virtualwallet.data.api.RetrofitClient
-import com.krushkov.virtualwallet.data.model.auth.LoginRequest
+import com.krushkov.virtualwallet.domain.error.getMessage
+import com.krushkov.virtualwallet.domain.repositories.AuthRepository
+import com.krushkov.virtualwallet.domain.result.fold
+import com.krushkov.virtualwallet.domain.result.onError
+import com.krushkov.virtualwallet.domain.result.onSuccess
+import com.krushkov.virtualwallet.viewmodel.states.AuthState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
-    private val _authState = MutableLiveData<AuthState>(AuthState.Loading)
-    val authState: LiveData<AuthState> = _authState
-
-    fun checkSession() {
-        viewModelScope.launch {
-
-            _authState.value = AuthState.Loading
-
-            try {
-                val response = ApiProvider.authApi.getMe()
-
-                if (response.isSuccessful) {
-                    val user = response.body()?.data
-
-                    if (user != null) {
-                        _authState.value = AuthState.Authenticated(user)
-                    } else {
-                        _authState.value = AuthState.Unauthenticated
-                    }
-
-                } else {
-                    _authState.value = AuthState.Unauthenticated
-                }
-
-            } catch (e: Exception) {
-                _authState.value = AuthState.Unauthenticated
-            }
-        }
-    }
+    var state by mutableStateOf(AuthState())
+        private set
 
     fun login(identifier: String, password: String) {
         viewModelScope.launch {
+            state = state.copy(isLoading = true, error = null)
 
-            _authState.value = AuthState.Loading
-
-            try {
-                val loginResponse = ApiProvider.authApi.login(
-                    LoginRequest(identifier, password)
-                )
-
-                if (loginResponse.isSuccessful) {
-
-                    val user = loginResponse.body()?.data
-
-                    if (user != null) {
-
-                        val meResponse = ApiProvider.authApi.getMe()
-
-                        if (meResponse.isSuccessful) {
-                            _authState.value = AuthState.Authenticated(user)
-                        } else {
-                            _authState.value =
-                                AuthState.Error("Session not established")
-                        }
-
-                    } else {
-                        _authState.value =
-                            AuthState.Error("Empty user data")
-                    }
-
-                } else {
-                    _authState.value = AuthState.Error("Login failed")
+            authRepository.login(identifier, password).fold(
+                onSuccess = {
+                    state = state.copy(
+                        isLoading = false,
+                        user = it,
+                        isLoggedIn = true
+                    )
+                },
+                onError = {
+                    state = state.copy(
+                        isLoading = false,
+                        error = it.getMessage()
+                    )
                 }
-
-            } catch (e: Exception) {
-                _authState.value = AuthState.Error("Network error")
-            }
+            )
         }
     }
 
-    fun logout() {
+    fun register(
+        username: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+        email: String
+    ) {
         viewModelScope.launch {
+            state = state.copy(isLoading = true, error = null)
 
-            try {
-                val response = ApiProvider.authApi.logout()
-
-                if (response.isSuccessful) {
-                    _authState.value = AuthState.Unauthenticated
-                } else {
-                    _authState.value = AuthState.Error("Logout failed")
+            authRepository.register(
+                username, password, firstName, lastName, email
+            ).fold(
+                onSuccess = {
+                    state = state.copy(isLoading = false)
+                },
+                onError = {
+                    state = state.copy(
+                        isLoading = false,
+                        error = it.getMessage()
+                    )
                 }
-
-            } catch (e: Exception) {
-                _authState.value = AuthState.Error("Network error")
-            }
+            )
         }
     }
 }

@@ -14,7 +14,7 @@ object RetrofitClient {
 
     fun init(context: Context) {
 
-        val cookieJar = SessionCookieJar(context.applicationContext)
+        val cookieJar = SessionCookieJar(context)
 
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -34,7 +34,7 @@ object RetrofitClient {
 
     fun <T> create(service: Class<T>): T {
         if (!::retrofit.isInitialized) {
-            throw IllegalStateException("RetrofitClient is not initialized. Call init() first.")
+            throw IllegalStateException("RetrofitClient is not initialized")
         }
         return retrofit.create(service)
     }
