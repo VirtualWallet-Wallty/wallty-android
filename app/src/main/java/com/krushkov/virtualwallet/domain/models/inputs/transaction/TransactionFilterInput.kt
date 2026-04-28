@@ -6,6 +6,8 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class TransactionFilterInput(
+    val label: String? = null,
+
     val senderId: Long? = null,
     val recipientId: Long? = null,
 
@@ -15,9 +17,17 @@ data class TransactionFilterInput(
     val type: TransactionType? = null,
     val status: TransactionStatus? = null,
 
+    val senderCurrencyCode: String? = null,
+    val recipientCurrencyCode: String? = null,
+
+    val minSenderAmount: BigDecimal? = null,
+    val maxSenderAmount: BigDecimal? = null,
+
+    val minRecipientAmount: BigDecimal? = null,
+    val maxRecipientAmount: BigDecimal? = null,
+
+    val externalReference: String? = null,
+
     val createdFrom: LocalDateTime? = null,
     val createdTo: LocalDateTime? = null,
-
-    val minAmount: BigDecimal? = null,
-    val maxAmount: BigDecimal? = null
 )

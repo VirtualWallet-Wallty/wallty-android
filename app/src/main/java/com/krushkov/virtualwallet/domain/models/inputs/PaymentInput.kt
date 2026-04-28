@@ -4,5 +4,7 @@ import java.math.BigDecimal
 
 data class PaymentInput(
     val amount: BigDecimal,
-    val merchantReference: String
+    val currencyCode: String,
+    val merchantReference: String,
+    val sourceWalletId: Long
 )

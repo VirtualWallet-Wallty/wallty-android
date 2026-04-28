@@ -27,6 +27,11 @@ abstract class RepositoryModule {
     ): CurrencyRepository
 
     @Binds
+    abstract fun bindExchangeRateRepository(
+        impl: ExchangeRateRepositoryImpl
+    ): ExchangeRateRepository
+
+    @Binds
     abstract fun bindPaymentRepository(
         impl: PaymentRepositoryImpl
     ): PaymentRepository

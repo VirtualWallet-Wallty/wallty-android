@@ -4,5 +4,8 @@ import java.math.BigDecimal
 
 data class TransferInput(
     val amount: BigDecimal,
-    val recipientId: Long
+    val currencyCode: String,
+    val recipientId: Long,
+    val sourceWalletId: Long,
+    val targetWalletId: Long? = null
 )

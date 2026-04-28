@@ -5,7 +5,8 @@ import com.krushkov.virtualwallet.domain.error.AppError
 sealed class AppResult<out T : Any> {
 
     data class Success<out T : Any>(
-        val data: T
+        val data: T,
+        val message: String? = null
     ) : AppResult<T>()
 
     data class Error(

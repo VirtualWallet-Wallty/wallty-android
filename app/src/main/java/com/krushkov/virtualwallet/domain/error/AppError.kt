@@ -4,12 +4,13 @@ sealed class AppError {
 
     data class Api(
         val message: String,
-        val statusCode: Int
+        val statusCode: Int,
+        val errors: Map<String, String> = emptyMap()
     ) : AppError()
 
     data class Validation(
         val message: String,
-        val fieldErrors: Map<String, String>
+        val fieldErrors: Map<String, String> = emptyMap()
     ) : AppError()
 
     data class Network(

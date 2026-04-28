@@ -2,6 +2,7 @@ package com.krushkov.virtualwallet.data.api
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import okhttp3.Cookie
 import okhttp3.CookieJar
@@ -24,9 +25,20 @@ class SessionCookieJar(context: Context) : CookieJar {
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val cookies = prefs.getString(url.host, null) ?: return emptyList()
 
-        return cookies.split(";").mapNotNull {
-            deserialize(url, it)
-        }
+        val validCookies = cookies.split(";")
+            .mapNotNull { deserialize(url, it) }
+            .filter { it.expiresAt > System.currentTimeMillis() }
+
+        saveFromResponse(url, validCookies)
+
+        Log.d("COOKIE", "Loading cookies: $cookies")
+
+        return validCookies
+    }
+
+    fun clear() {
+        Log.d("COOKIE", "Clearing cookies")
+        prefs.edit().clear().apply()
     }
 
     private fun serialize(cookie: Cookie): String {

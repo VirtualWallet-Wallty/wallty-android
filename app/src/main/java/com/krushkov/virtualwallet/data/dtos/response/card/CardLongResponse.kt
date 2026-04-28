@@ -15,5 +15,5 @@ data class CardLongResponse(
 
     val status: String,
 
-    val createdAt: LocalDateTime
+    val createdAt: String
 )

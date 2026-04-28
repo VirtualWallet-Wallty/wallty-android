@@ -3,7 +3,6 @@ package com.krushkov.virtualwallet.domain.repositories
 import com.krushkov.virtualwallet.domain.models.inputs.wallet.WalletCreateInput
 import com.krushkov.virtualwallet.domain.models.outputs.wallet.Wallet
 import com.krushkov.virtualwallet.domain.result.AppResult
-import retrofit2.http.Body
 
 interface WalletRepository {
 

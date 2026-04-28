@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface CurrencyApi {
 
     @GET("/api/currencies/{targetCurrencyCode}")
-    suspend fun getByCode(@Path("code") code: String):
+    suspend fun getByCode(@Path("targetCurrencyCode") targetCurrencyCode: String):
             Response<ApiResponse<CurrencyLongResponse>>
 
     @GET("/api/currencies")

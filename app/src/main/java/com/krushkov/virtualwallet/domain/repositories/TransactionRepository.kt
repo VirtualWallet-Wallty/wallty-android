@@ -9,7 +9,8 @@ interface TransactionRepository {
     suspend fun search(
         filter: TransactionFilterInput,
         page: Int,
-        size: Int
+        size: Int,
+        sort: String? = "createdAt,desc"
     ): AppResult<List<Transaction>>
 
     suspend fun getById(id: Long): AppResult<Transaction>

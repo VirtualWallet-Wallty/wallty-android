@@ -1,6 +1,7 @@
 package com.krushkov.virtualwallet.data.api
 
 import android.content.Context
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,6 +23,21 @@ object RetrofitClient {
 
         val client = OkHttpClient.Builder()
             .cookieJar(cookieJar)
+            .addInterceptor { chain ->
+
+                val request = chain.request()
+                val response = chain.proceed(request)
+
+                if (response.code == 401) {
+                    Log.d("AUTH", "Session expired")
+
+                    cookieJar.clear()
+
+                    SessionManager.notifySessionExpired()
+                }
+
+                response
+            }
             .addInterceptor(logging)
             .build()
 
