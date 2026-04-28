@@ -3,6 +3,7 @@ package com.krushkov.virtualwallet.data.mappers
 import com.krushkov.virtualwallet.data.dtos.request.card.CardCreateRequest
 import com.krushkov.virtualwallet.data.dtos.response.card.CardLongResponse
 import com.krushkov.virtualwallet.data.dtos.response.card.CardShortResponse
+import com.krushkov.virtualwallet.data.utils.toLocalDateTimeOrNull
 import com.krushkov.virtualwallet.domain.models.inputs.card.CardCreateInput
 import com.krushkov.virtualwallet.domain.models.outputs.card.Card
 
@@ -30,7 +31,7 @@ fun CardLongResponse.toDomain(): Card {
         status = status.toCardStatus(),
         expirationMonth = expirationMonth,
         expirationYear = expirationYear,
-        createdAt = createdAt
+        createdAt = createdAt.toLocalDateTimeOrNull()
     )
 }
 
@@ -39,7 +40,7 @@ fun CardCreateInput.toRequest(): CardCreateRequest {
 
     return CardCreateRequest(
         cardHolder = cardHolder,
-        cardNumber = cardHolder,
+        cardNumber = cardNumber,
         expirationMonth = month,
         expirationYear = year
     )

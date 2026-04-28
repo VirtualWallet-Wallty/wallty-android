@@ -8,12 +8,20 @@ import java.time.LocalDateTime
 
 data class TransactionLongResponse(
     val id: Long,
+    val label: String,
 
     val type: String,
     val status: String,
 
-    val amount: BigDecimal,
-    val currency: CurrencyShortResponse,
+    val senderAmount: BigDecimal,
+    val senderCurrency: CurrencyShortResponse,
+
+    val recipientAmount: BigDecimal,
+    val recipientCurrency: CurrencyShortResponse,
+
+    val exchangeRate: BigDecimal,
+
+    val direction: String,
 
     val sender: UserShortResponse,
     val recipient: UserShortResponse,
@@ -23,5 +31,5 @@ data class TransactionLongResponse(
 
     val externalReference: String,
 
-    val createdAt: LocalDateTime
+    val createdAt: String
 )

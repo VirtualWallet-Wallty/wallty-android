@@ -3,6 +3,7 @@ package com.krushkov.virtualwallet.data.mappers
 import com.krushkov.virtualwallet.data.dtos.request.wallet.WalletCreateRequest
 import com.krushkov.virtualwallet.data.dtos.response.wallet.WalletLongResponse
 import com.krushkov.virtualwallet.data.dtos.response.wallet.WalletShortResponse
+import com.krushkov.virtualwallet.data.utils.toLocalDateTimeOrNull
 import com.krushkov.virtualwallet.domain.models.inputs.wallet.WalletCreateInput
 import com.krushkov.virtualwallet.domain.models.outputs.wallet.Wallet
 
@@ -24,15 +25,15 @@ fun WalletShortResponse.toDomain(): Wallet {
 fun WalletLongResponse.toDomain(): Wallet {
     return Wallet(
         id = id,
-        ownerId = null,
+        ownerId = owner.id,
         owner = owner.toDomain(),
         name = name,
         balance = balance,
-        currencyCode = null,
+        currencyCode = currency.code,
         currency = currency.toDomain(),
         isDefault = isDefault,
-        createdAt = createdAt.let { java.time.LocalDateTime.parse(it) },
-        updatedAt = updatedAt.let { java.time.LocalDateTime.parse(it) }
+        createdAt = createdAt.toLocalDateTimeOrNull(),
+        updatedAt = updatedAt.toLocalDateTimeOrNull()
     )
 }
 

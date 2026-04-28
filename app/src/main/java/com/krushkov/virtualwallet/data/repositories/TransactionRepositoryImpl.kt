@@ -19,20 +19,28 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun search(
         filter: TransactionFilterInput,
         page: Int,
-        size: Int
+        size: Int,
+        sort: String?
     ): AppResult<List<Transaction>> {
         return apiCall {
             api.search(
+                label = filter.label,
                 senderId = filter.senderId,
                 recipientId = filter.recipientId,
                 senderWalletId = filter.senderWalletId,
                 recipientWalletId = filter.recipientWalletId,
                 type = filter.type?.name,
                 status = filter.status?.name,
+                senderCurrencyCode = filter.senderCurrencyCode,
+                recipientCurrencyCode = filter.recipientCurrencyCode,
+                minSenderAmount = filter.minSenderAmount,
+                maxSenderAmount = filter.maxSenderAmount,
+                minRecipientAmount = filter.minRecipientAmount,
+                maxRecipientAmount = filter.maxRecipientAmount,
+                externalReference = filter.externalReference,
                 createdFrom = filter.createdFrom?.toString(),
                 createdTo = filter.createdTo?.toString(),
-                minAmount = filter.minAmount,
-                maxAmount = filter.maxAmount,
+                sort = sort,
                 page = page,
                 size = size
             )

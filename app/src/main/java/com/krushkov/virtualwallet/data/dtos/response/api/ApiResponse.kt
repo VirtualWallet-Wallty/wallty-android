@@ -5,6 +5,6 @@ data class ApiResponse<T>(
     val path: String?,
     val message: String?,
     val data: T?,
-    val errors: Map<String, String>,
+    val errors: Map<String, String>?,
     val timestamp: String
 )

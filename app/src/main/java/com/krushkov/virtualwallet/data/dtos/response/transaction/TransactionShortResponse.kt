@@ -4,13 +4,21 @@ import java.math.BigDecimal
 
 data class TransactionShortResponse(
     val id: Long,
+    val label: String?,
 
     val type: String,
     val status: String,
 
-    val amount: BigDecimal,
-    val currencyCode: String,
+    val senderAmount: BigDecimal,
+    val senderCurrencyCode: String,
 
-    val senderWalletId: Long,
-    val recipientWalletId: Long
+    val recipientAmount: BigDecimal,
+    val recipientCurrencyCode: String,
+
+    val direction: String?,
+
+    val senderWalletId: Long?,
+    val recipientWalletId: Long?,
+
+    val createdAt: String
 )

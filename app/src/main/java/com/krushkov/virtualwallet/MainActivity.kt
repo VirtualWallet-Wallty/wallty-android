@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.krushkov.virtualwallet.ui.nav.AppNavGraph
-import com.krushkov.virtualwallet.ui.theme.VirtualwalletTheme
+import com.krushkov.virtualwallet.ui.theme.VirtualWalletTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            VirtualwalletTheme {
+            VirtualWalletTheme {
                 AppNavGraph()
             }
         }

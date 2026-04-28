@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.krushkov.virtualwallet"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.krushkov.virtualwallet"
@@ -72,4 +72,14 @@ dependencies {
 
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    // QR code generation
+    implementation("com.google.zxing:core:3.5.3")
+
+    // CameraX
+    implementation("androidx.camera:camera-camera2:1.3.4")
+    implementation("androidx.camera:camera-lifecycle:1.3.4")
+    implementation("androidx.camera:camera-view:1.3.4")
+
+    // ML Kit barcode scanning
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
 }

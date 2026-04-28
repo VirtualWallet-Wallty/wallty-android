@@ -43,6 +43,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideExchangeRateApi(client: RetrofitClient): ExchangeRateApi {
+        return client.create(ExchangeRateApi::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun providePaymentApi(client: RetrofitClient): PaymentApi {
         return client.create(PaymentApi::class.java)
     }
