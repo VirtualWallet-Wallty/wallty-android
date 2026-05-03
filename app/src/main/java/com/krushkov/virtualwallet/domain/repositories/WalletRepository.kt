@@ -15,4 +15,8 @@ interface WalletRepository {
     suspend fun create(input: WalletCreateInput): AppResult<Wallet>
 
     suspend fun setDefault(id: Long): AppResult<Unit>
+
+    suspend fun update(id: Long, name: String): AppResult<Wallet>
+
+    suspend fun delete(id: Long): AppResult<Unit>
 }

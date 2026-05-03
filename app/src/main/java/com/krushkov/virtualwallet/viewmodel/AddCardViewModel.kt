@@ -1,10 +1,12 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.models.inputs.card.CardCreateInput
 import com.krushkov.virtualwallet.domain.repositories.CardRepository
@@ -12,11 +14,13 @@ import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.AddCardState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddCardViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val cardRepository: CardRepository,
     private val notificationManager: NotificationManager
 ) : ViewModel() {
@@ -53,7 +57,7 @@ class AddCardViewModel @Inject constructor(
         if (state.cardHolder.isBlank() || state.cardNumber.isBlank() ||
             state.expirationMonth.isBlank() || state.expirationYear.isBlank()
         ) {
-            viewModelScope.launch { notificationManager.showError("All fields are required") }
+            viewModelScope.launch { notificationManager.showError(context.getString(R.string.msg_card_fields_required)) }
             return
         }
         viewModelScope.launch {
@@ -66,7 +70,7 @@ class AddCardViewModel @Inject constructor(
                 )
             )) {
                 is AppResult.Success -> {
-                    notificationManager.showSuccess("Card added successfully")
+                    notificationManager.showSuccess(context.getString(R.string.msg_card_added))
                     state = state.copy(isLoading = false, isSuccess = true)
                 }
                 is AppResult.Error -> {

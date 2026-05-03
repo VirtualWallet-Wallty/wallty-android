@@ -1,6 +1,7 @@
 package com.krushkov.virtualwallet.data.repositories
 
 import com.krushkov.virtualwallet.data.api.interfaces.WalletApi
+import com.krushkov.virtualwallet.data.dtos.request.wallet.WalletUpdateRequest
 import com.krushkov.virtualwallet.data.mappers.toDomain
 import com.krushkov.virtualwallet.data.mappers.toRequest
 import com.krushkov.virtualwallet.data.remote.ApiHandler.apiCall
@@ -42,6 +43,18 @@ class WalletRepositoryImpl @Inject constructor(
     override suspend fun setDefault(id: Long): AppResult<Unit> {
         return apiCall {
             api.setDefault(id)
+        }
+    }
+
+    override suspend fun update(id: Long, name: String): AppResult<Wallet> {
+        return apiCall {
+            api.update(id, WalletUpdateRequest(name))
+        }.map { it.toDomain() }
+    }
+
+    override suspend fun delete(id: Long): AppResult<Unit> {
+        return apiCall {
+            api.delete(id)
         }
     }
 }

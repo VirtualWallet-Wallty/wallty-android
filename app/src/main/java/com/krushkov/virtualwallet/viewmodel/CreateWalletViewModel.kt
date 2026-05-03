@@ -1,25 +1,30 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.models.inputs.wallet.WalletCreateInput
 import com.krushkov.virtualwallet.domain.models.outputs.currency.Currency
 import com.krushkov.virtualwallet.domain.repositories.CurrencyRepository
 import com.krushkov.virtualwallet.domain.repositories.WalletRepository
 import com.krushkov.virtualwallet.domain.result.AppResult
+import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.CreateWalletState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateWalletViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val walletRepository: WalletRepository,
     private val currencyRepository: CurrencyRepository,
-    private val notificationManager: com.krushkov.virtualwallet.ui.utils.NotificationManager
+    private val notificationManager: NotificationManager
 ) : ViewModel() {
 
     var state by mutableStateOf(CreateWalletState())
@@ -27,6 +32,7 @@ class CreateWalletViewModel @Inject constructor(
 
     init {
         loadCurrencies()
+        loadWalletAvailability()
     }
 
     private fun loadCurrencies() {
@@ -45,7 +51,7 @@ class CreateWalletViewModel @Inject constructor(
                         isLoading = false
                     )
                     viewModelScope.launch {
-                        notificationManager.showError("Failed to load currencies")
+                        notificationManager.showError(context.getString(R.string.msg_failed_load_currencies))
                     }
                 }
             }
@@ -64,6 +70,15 @@ class CreateWalletViewModel @Inject constructor(
         state = state.copy(makeDefault = makeDefault)
     }
 
+    private fun loadWalletAvailability() {
+        viewModelScope.launch {
+            when (val result = walletRepository.getMyAll()) {
+                is AppResult.Success -> state = state.copy(hasWallets = result.data.isNotEmpty())
+                is AppResult.Error -> state = state.copy(hasWallets = false)
+            }
+        }
+    }
+
     fun toggleCurrencyMenu(expanded: Boolean) {
         state = state.copy(isCurrencyMenuExpanded = expanded)
     }
@@ -72,7 +87,7 @@ class CreateWalletViewModel @Inject constructor(
         val selectedCurrency = state.selectedCurrency ?: return
         if (state.name.isBlank()) {
             viewModelScope.launch {
-                notificationManager.showError("Wallet name cannot be empty")
+                notificationManager.showError(context.getString(R.string.msg_wallet_name_empty))
             }
             return
         }
@@ -89,14 +104,14 @@ class CreateWalletViewModel @Inject constructor(
                     if (state.makeDefault) {
                         walletRepository.setDefault(result.data.id)
                     }
-                    notificationManager.showSuccess("Wallet created successfully")
+                    notificationManager.showSuccess(context.getString(R.string.msg_wallet_created))
                     state = state.copy(isLoading = false, isSuccess = true)
                 }
                 is AppResult.Error -> {
                     state = state.copy(
                         isLoading = false
                     )
-                    notificationManager.showError("Failed to create wallet")
+                    notificationManager.showError(context.getString(R.string.msg_failed_create_wallet))
                 }
             }
         }

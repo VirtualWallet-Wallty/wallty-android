@@ -25,6 +25,7 @@ fun Scaffold(
     topContent: @Composable ColumnScope.() -> Unit = {},
     cardTitle: String? = null,
     showCardBackground: Boolean = false,
+    cardContentScrollable: Boolean = true,
     cardContent: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -72,7 +73,10 @@ fun Scaffold(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .verticalScroll(rememberScrollState())
+                        .then(
+                            if (cardContentScrollable) Modifier.verticalScroll(rememberScrollState())
+                            else Modifier
+                        )
                         .padding(horizontal = if (showCardBackground) 16.dp else 0.dp)
                 ) {
                     cardContent()

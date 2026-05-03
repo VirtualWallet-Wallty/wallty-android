@@ -1,11 +1,13 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.models.inputs.TopUpInput
 import com.krushkov.virtualwallet.domain.models.outputs.card.Card
@@ -18,12 +20,14 @@ import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.TopUpState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class TopUpViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle,
     private val walletRepository: WalletRepository,
     private val cardRepository: CardRepository,
@@ -130,7 +134,7 @@ class TopUpViewModel @Inject constructor(
                 }
                 when (val result = topUpRepository.topUp(input)) {
                     is AppResult.Success -> {
-                        notificationManager.showSuccess(result.message ?: "Top-up successful!")
+                        notificationManager.showSuccess(result.message ?: context.getString(R.string.msg_topup_successful))
                         state = state.copy(isSubmitLoading = false, isSuccess = true)
                     }
                     is AppResult.Error -> {
@@ -139,7 +143,7 @@ class TopUpViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                notificationManager.showError("Something went wrong")
+                notificationManager.showError(context.getString(R.string.msg_something_went_wrong))
                 state = state.copy(isSubmitLoading = false)
             }
         }

@@ -9,12 +9,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.ui.core.*
 import com.krushkov.virtualwallet.ui.nav.Routes
-import com.krushkov.virtualwallet.ui.features.cards.components.CardStatusConfirmDialog
 import com.krushkov.virtualwallet.ui.features.cards.components.CardsHeroSection
 import com.krushkov.virtualwallet.ui.features.cards.components.CardsHeroSectionShimmer
-import com.krushkov.virtualwallet.ui.features.transactions.components.TransactionsSection
+import com.krushkov.virtualwallet.ui.features.transactions.components.LatestTransactionsSection
 import com.krushkov.virtualwallet.viewmodel.CardsViewModel
 
 @Composable
@@ -43,41 +47,39 @@ fun CardsScreen(
                         onCardSelected = { viewModel.selectCard(it) },
                         onTopUpClick = { state.selectedCard?.id?.let { navController.navigate("top_up/card/$it") } },
                         onCardStatusActionClick = { viewModel.onCardStatusActionClick() },
-                        onRemoveClick = { viewModel.removeCard() },
+                        onRemoveClick = { viewModel.showRemoveConfirm() },
                         onAddCardClick = { navController.navigate(Routes.ADD_CARD) }
                     )
                 }
             },
-            cardTitle = "Latest Top-ups",
+            cardTitle = stringResource(R.string.title_latest_topups),
             showCardBackground = true,
+            cardContentScrollable = false,
             cardContent = {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TransactionsSection(
+                state.selectedCard?.let { card ->
+                    LatestTransactionsSection(
                         transactions = state.topUps,
                         currentWalletId = -1,
                         currencies = state.currencies,
-                        emptyMessage = "No recent top-ups for your cards."
+                        emptyMessage = stringResource(R.string.msg_no_topups),
+                        seeAllText = stringResource(R.string.action_see_all),
+                        onSeeAllClick = {
+                            navController.navigate(
+                                "transactions?type=TOP_UP&cardId=${card.id}&label=${card.cardSuffix}"
+                            )
+                        },
+                        onTransactionClick = { navController.navigate(Routes.transactionDetails(it.id)) }
                     )
-                }
+                } ?: LatestTransactionsSection(
+                    transactions = state.topUps,
+                    currentWalletId = -1,
+                    currencies = state.currencies,
+                    emptyMessage = stringResource(R.string.msg_no_topups),
+                    seeAllText = stringResource(R.string.action_see_all),
+                    onSeeAllClick = {},
+                    onTransactionClick = { navController.navigate(Routes.transactionDetails(it.id)) }
+                )
             }
         )
-
-        if (state.isDeactivateDialogVisible) {
-            CardStatusConfirmDialog(
-                isDeactivating = true,
-                onDismiss = { viewModel.dismissCardStatusDialog() },
-                onConfirm = { viewModel.confirmDeactivate() }
-            )
-        }
-
-        if (state.isActivateDialogVisible) {
-            CardStatusConfirmDialog(
-                isDeactivating = false,
-                onDismiss = { viewModel.dismissCardStatusDialog() },
-                onConfirm = { viewModel.confirmActivate() }
-            )
-        }
     }
 }

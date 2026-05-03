@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -20,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.krushkov.virtualwallet.ui.theme.*
 import com.krushkov.virtualwallet.ui.utils.innerShadow
 import com.krushkov.virtualwallet.ui.utils.outerShadow
+
 @Composable
 fun BottomNavBar(
     navController: NavController
@@ -32,7 +34,7 @@ fun BottomNavBar(
     )
 
     val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route
+        navController.currentBackStackEntryAsState().value?.destination?.route?.substringBefore("?")
 
     Box(
         modifier = Modifier
@@ -40,7 +42,6 @@ fun BottomNavBar(
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(64.dp)
     ) {
-        // Glass Background layer
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,6 +69,7 @@ fun BottomNavBar(
             items.forEach { item ->
                 val isSelected = currentRoute == item.route
                 val interactionSource = remember { MutableInteractionSource() }
+                val label = stringResource(item.labelRes)
 
                 Column(
                     modifier = Modifier
@@ -79,10 +81,10 @@ fun BottomNavBar(
                         ) {
                             navController.navigate(item.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                                    saveState = false
                                 }
                                 launchSingleTop = true
-                                restoreState = true
+                                restoreState = false
                             }
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,15 +92,15 @@ fun BottomNavBar(
                 ) {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.label,
+                        contentDescription = label,
                         modifier = Modifier.size(26.dp),
                         tint = if (isSelected) CyanNeon else CloudWhite
                     )
-                    
+
                     Spacer(modifier = Modifier.height(4.dp))
-                    
+
                     Text(
-                        text = item.label,
+                        text = label,
                         fontSize = 11.sp,
                         color = if (isSelected) CyanNeon else CloudWhite
                     )

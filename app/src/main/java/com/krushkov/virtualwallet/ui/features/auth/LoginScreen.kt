@@ -6,17 +6,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.ui.common.AppHeader
 import com.krushkov.virtualwallet.ui.core.Button
 import com.krushkov.virtualwallet.ui.core.TextField
 import com.krushkov.virtualwallet.ui.theme.*
 import com.krushkov.virtualwallet.viewmodel.AuthViewModel
-
 import com.krushkov.virtualwallet.ui.core.LoadingOverlay
 
 @Composable
@@ -25,7 +26,6 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
-
     val state = viewModel.state
 
     var identifier by remember { mutableStateOf("") }
@@ -52,11 +52,11 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AppHeader()
-            
+
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "Login",
+                text = stringResource(R.string.login_title),
                 fontSize = 32.sp,
                 color = CloudWhite,
                 fontWeight = FontWeight.Bold
@@ -67,7 +67,7 @@ fun LoginScreen(
             TextField(
                 value = identifier,
                 onValueChange = { identifier = it },
-                label = "Email or Username",
+                label = stringResource(R.string.label_email_or_username),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -76,7 +76,7 @@ fun LoginScreen(
             TextField(
                 value = password,
                 onValueChange = { password = it },
-                label = "Password",
+                label = stringResource(R.string.label_password),
                 isPassword = true,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -85,16 +85,18 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                text = "Login",
+                text = stringResource(R.string.action_login),
                 onClick = { viewModel.login(identifier, password) },
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = CyanNeon.copy(alpha = 0.5f)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    "Don't have an account? Register",
+                    stringResource(R.string.link_no_account_register),
                     color = CyanNeon,
                     fontWeight = FontWeight.Medium
                 )
@@ -106,7 +108,7 @@ fun LoginScreen(
                     CircularProgressIndicator(color = CyanNeon)
                 }
             }
-            
+
             Spacer(modifier = Modifier.weight(1f))
         }
     }

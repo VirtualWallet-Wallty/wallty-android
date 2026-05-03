@@ -14,5 +14,6 @@ data class CardsState(
     val topUps: List<Transaction> = emptyList(),
     val isDeactivateDialogVisible: Boolean = false,
     val isActivateDialogVisible: Boolean = false,
+    val isRemoveConfirmVisible: Boolean = false,
     val currencies: Map<String, com.krushkov.virtualwallet.domain.models.outputs.currency.Currency> = emptyMap()
 )

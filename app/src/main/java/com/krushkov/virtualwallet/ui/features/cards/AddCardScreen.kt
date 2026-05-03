@@ -14,11 +14,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.ui.core.Button
 import com.krushkov.virtualwallet.ui.core.DropdownField
 import com.krushkov.virtualwallet.ui.core.Scaffold
@@ -57,20 +59,20 @@ fun AddCardScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "New Card",
+                    text = stringResource(R.string.title_new_card),
                     color = CloudWhite,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Add your payment card",
+                    text = stringResource(R.string.subtitle_new_card),
                     color = CloudWhite.copy(alpha = 0.7f),
                     fontSize = 14.sp
                 )
             }
         },
-        cardTitle = "Card Details",
+        cardTitle = stringResource(R.string.label_card_details),
         cardContent = {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -79,12 +81,12 @@ fun AddCardScreen(
                 TextField(
                     value = state.cardHolder,
                     onValueChange = { viewModel.onCardHolderChange(it) },
-                    label = "Card Holder"
+                    label = stringResource(R.string.label_card_holder)
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "Card Number",
+                        text = stringResource(R.string.label_card_number),
                         color = CloudWhite,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
@@ -98,7 +100,7 @@ fun AddCardScreen(
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "Expiration",
+                        text = stringResource(R.string.label_expiration),
                         color = CloudWhite,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
@@ -110,7 +112,7 @@ fun AddCardScreen(
                     ) {
                         DropdownField(
                             value = state.expirationMonth,
-                            placeholder = "Month",
+                            placeholder = stringResource(R.string.label_month),
                             expanded = state.isMonthMenuExpanded,
                             onExpandedChange = { viewModel.toggleMonthMenu(it) },
                             modifier = Modifier.weight(1f),
@@ -126,7 +128,7 @@ fun AddCardScreen(
 
                         DropdownField(
                             value = state.expirationYear,
-                            placeholder = "Year",
+                            placeholder = stringResource(R.string.label_year),
                             expanded = state.isYearMenuExpanded,
                             onExpandedChange = { viewModel.toggleYearMenu(it) },
                             modifier = Modifier.weight(1f),
@@ -149,13 +151,13 @@ fun AddCardScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
                 ) {
                     Button(
-                        text = "Cancel",
+                        text = stringResource(R.string.action_cancel),
                         onClick = { navController.popBackStack() },
                         containerColor = Red.copy(alpha = 0.3f)
                     )
 
                     Button(
-                        text = "Add",
+                        text = stringResource(R.string.action_add),
                         onClick = { viewModel.addCard() },
                         isLoading = state.isLoading,
                         containerColor = CyanNeon.copy(alpha = 0.5f)

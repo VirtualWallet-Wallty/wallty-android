@@ -27,14 +27,15 @@ import com.krushkov.virtualwallet.ui.utils.*
 @Composable
 fun TransactionItem(
     transaction: Transaction,
-    currentWalletId: Long,
+    currentWalletId: Long?,
+    ownedWalletIds: Set<Long> = emptySet(),
     currencies: Map<String, Currency> = emptyMap(),
     onTransactionClick: (Transaction) -> Unit = {}
 ) {
-    val isIncoming = transaction.isIncoming(currentWalletId)
-    val color = transaction.getUiColor(currentWalletId)
-    val sign = transaction.getUiSign(currentWalletId)
-    val icon = transaction.getUiIcon(currentWalletId)
+    val isIncoming = transaction.isIncoming(currentWalletId, ownedWalletIds)
+    val color = transaction.getUiColor(currentWalletId, ownedWalletIds)
+    val sign = transaction.getUiSign(currentWalletId, ownedWalletIds)
+    val icon = transaction.getUiIcon(currentWalletId, ownedWalletIds)
     
     val amount = if (isIncoming) transaction.recipientAmount else transaction.senderAmount
     val currencyCode = if (isIncoming) transaction.recipientCurrencyCode else transaction.senderCurrencyCode
@@ -72,7 +73,7 @@ fun TransactionItem(
             // Info Column
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = transaction.getLabel(currentWalletId),
+                    text = transaction.getLabel(currentWalletId, ownedWalletIds),
                     color = CloudWhite,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.SemiBold,

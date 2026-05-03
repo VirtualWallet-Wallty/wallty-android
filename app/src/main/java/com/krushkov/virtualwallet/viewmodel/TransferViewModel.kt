@@ -1,10 +1,12 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.models.inputs.TransferInput
 import com.krushkov.virtualwallet.domain.models.outputs.wallet.Wallet
@@ -16,11 +18,13 @@ import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.TransferState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TransferViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val walletRepository: WalletRepository,
     private val transferRepository: TransferRepository,
     private val userRepository: UserRepository,
@@ -99,7 +103,7 @@ class TransferViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    notificationManager.showError("Failed to load recipient info")
+                    notificationManager.showError(context.getString(R.string.msg_failed_load_recipient))
                     state = state.copy(
                         isLoadingRecipient = false,
                         scannedRecipientId = null
@@ -144,7 +148,7 @@ class TransferViewModel @Inject constructor(
                     )
                 )) {
                     is AppResult.Success -> {
-                        notificationManager.showSuccess("Transfer sent successfully!")
+                        notificationManager.showSuccess(context.getString(R.string.msg_transfer_sent))
                         state = state.copy(
                             isSendLoading = false,
                             isTransferSuccess = true,
@@ -159,7 +163,7 @@ class TransferViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                notificationManager.showError("Something went wrong")
+                notificationManager.showError(context.getString(R.string.msg_something_went_wrong))
                 state = state.copy(isSendLoading = false)
             }
         }

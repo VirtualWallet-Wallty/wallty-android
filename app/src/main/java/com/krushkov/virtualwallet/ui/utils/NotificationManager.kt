@@ -1,6 +1,7 @@
 package com.krushkov.virtualwallet.ui.utils
 
 import com.krushkov.virtualwallet.ui.common.NotificationData
+import com.krushkov.virtualwallet.ui.common.NotificationType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
@@ -17,5 +18,15 @@ class NotificationManager @Inject constructor() {
 
     suspend fun showError(message: String) {
         _notifications.emit(NotificationData(message, isSuccess = false))
+    }
+
+    suspend fun showWarning(message: String) {
+        _notifications.emit(
+            NotificationData(
+                message = message,
+                isSuccess = false,
+                type = NotificationType.Warning
+            )
+        )
     }
 }
