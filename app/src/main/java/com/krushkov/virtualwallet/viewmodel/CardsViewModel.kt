@@ -1,10 +1,12 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.models.inputs.transaction.TransactionFilterInput
 import com.krushkov.virtualwallet.domain.models.outputs.card.Card
@@ -16,11 +18,13 @@ import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.domain.result.fold
 import com.krushkov.virtualwallet.viewmodel.states.CardsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val cardRepository: CardRepository,
     private val transactionRepository: TransactionRepository,
     private val walletRepository: com.krushkov.virtualwallet.domain.repositories.WalletRepository,
@@ -72,7 +76,12 @@ class CardsViewModel @Inject constructor(
 
     fun selectCard(card: Card) {
         if (state.selectedCard?.id == card.id) return
-        state = state.copy(selectedCard = card)
+        state = state.copy(
+            selectedCard = card,
+            isDeactivateDialogVisible = false,
+            isActivateDialogVisible = false,
+            isRemoveConfirmVisible = false
+        )
         loadTopUps(listOf(card.cardSuffix))
         viewModelScope.launch {
             when (val result = cardRepository.getById(card.id)) {
@@ -87,8 +96,30 @@ class CardsViewModel @Inject constructor(
 
     fun onCardStatusActionClick() {
         when (state.selectedCard?.status) {
-            CardStatus.ACTIVE -> state = state.copy(isDeactivateDialogVisible = true)
-            CardStatus.USER_DEACTIVATED -> state = state.copy(isActivateDialogVisible = true)
+            CardStatus.ACTIVE -> {
+                if (state.isDeactivateDialogVisible) {
+                    confirmDeactivate()
+                } else {
+                    state = state.copy(
+                        isDeactivateDialogVisible = true,
+                        isActivateDialogVisible = false,
+                        isRemoveConfirmVisible = false
+                    )
+                    showClickAgainWarning()
+                }
+            }
+            CardStatus.USER_DEACTIVATED -> {
+                if (state.isActivateDialogVisible) {
+                    confirmActivate()
+                } else {
+                    state = state.copy(
+                        isActivateDialogVisible = true,
+                        isDeactivateDialogVisible = false,
+                        isRemoveConfirmVisible = false
+                    )
+                    showClickAgainWarning()
+                }
+            }
             else -> {}
         }
     }
@@ -103,7 +134,7 @@ class CardsViewModel @Inject constructor(
             state = state.copy(isDeactivateDialogVisible = false, isCardActionLoading = true)
             when (val result = cardRepository.deactivate(cardId)) {
                 is AppResult.Success -> {
-                    notificationManager.showSuccess("Card deactivated successfully")
+                    notificationManager.showSuccess(context.getString(R.string.msg_card_deactivated))
                     loadCards()
                 }
                 is AppResult.Error -> notificationManager.showError(result.error.getMessage())
@@ -118,7 +149,7 @@ class CardsViewModel @Inject constructor(
             state = state.copy(isActivateDialogVisible = false, isCardActionLoading = true)
             when (val result = cardRepository.activate(cardId)) {
                 is AppResult.Success -> {
-                    notificationManager.showSuccess("Card activated successfully")
+                    notificationManager.showSuccess(context.getString(R.string.msg_card_activated))
                     loadCards()
                 }
                 is AppResult.Error -> notificationManager.showError(result.error.getMessage())
@@ -127,19 +158,38 @@ class CardsViewModel @Inject constructor(
         }
     }
 
-    fun removeCard() {
+    fun showRemoveConfirm() {
+        if (state.isRemoveConfirmVisible) {
+            confirmRemove()
+        } else {
+            state = state.copy(
+                isRemoveConfirmVisible = true,
+                isDeactivateDialogVisible = false,
+                isActivateDialogVisible = false
+            )
+            showClickAgainWarning()
+        }
+    }
+
+    fun confirmRemove() {
         val cardId = state.selectedCard?.id ?: return
         viewModelScope.launch {
-            state = state.copy(isRemoveLoading = true)
+            state = state.copy(isRemoveConfirmVisible = false, isRemoveLoading = true)
             when (val result = cardRepository.remove(cardId)) {
                 is AppResult.Success -> {
-                    notificationManager.showSuccess("Card removed successfully")
+                    notificationManager.showSuccess(context.getString(R.string.msg_card_removed))
                     state = state.copy(selectedCard = null)
                     loadCards()
                 }
                 is AppResult.Error -> notificationManager.showError(result.error.getMessage())
             }
             state = state.copy(isRemoveLoading = false)
+        }
+    }
+
+    private fun showClickAgainWarning() {
+        viewModelScope.launch {
+            notificationManager.showWarning(context.getString(R.string.msg_click_again_confirm))
         }
     }
 

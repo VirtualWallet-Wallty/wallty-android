@@ -29,8 +29,11 @@ import kotlinx.coroutines.delay
 data class NotificationData(
     val message: String,
     val isSuccess: Boolean,
+    val type: NotificationType = if (isSuccess) NotificationType.Success else NotificationType.Error,
     val id: Long = System.currentTimeMillis()
 )
+
+enum class NotificationType { Success, Error, Warning }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -103,6 +106,37 @@ fun AppNotificationHost(
         }.build()
     }
 
+    val warningIcon = remember {
+        ImageVector.Builder(
+            name = "WarningIcon",
+            defaultWidth = 32.dp,
+            defaultHeight = 32.dp,
+            viewportWidth = 32f,
+            viewportHeight = 32f
+        ).path(
+            stroke = SolidColor(Color(0xFFFF9F1A)),
+            strokeLineWidth = 2f,
+            strokeLineJoin = StrokeJoin.Round
+        ) {
+            moveTo(16f, 3f)
+            lineTo(30f, 27f)
+            horizontalLineTo(2f)
+            close()
+        }.path(
+            fill = SolidColor(Color(0xFFFF9F1A))
+        ) {
+            moveTo(17.1f, 11f)
+            lineTo(16.9f, 20f)
+            horizontalLineTo(15.1f)
+            lineTo(14.9f, 11f)
+            close()
+            moveTo(16f, 24.5f)
+            moveToRelative(-1.25f, 0f)
+            arcToRelative(1.25f, 1.25f, 0f, true, true, 2.5f, 0f)
+            arcToRelative(1.25f, 1.25f, 0f, true, true, -2.5f, 0f)
+        }.build()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -138,7 +172,11 @@ fun AppNotificationHost(
                         modifier = Modifier
                             .matchParentSize()
                             .background(
-                                if (data.isSuccess) Green.copy(alpha = 0.5f) else Red.copy(alpha = 0.5f)
+                                when (data.type) {
+                                    NotificationType.Success -> Green.copy(alpha = 0.5f)
+                                    NotificationType.Error -> Red.copy(alpha = 0.5f)
+                                    NotificationType.Warning -> Color(0xFFFF9F1A).copy(alpha = 0.5f)
+                                }
                             )
                     )
 
@@ -151,8 +189,14 @@ fun AppNotificationHost(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Icon(
-                            painter = rememberVectorPainter(image = if (data.isSuccess) successIcon else errorIcon),
-                            contentDescription = if (data.isSuccess) "Success" else "Error",
+                            painter = rememberVectorPainter(
+                                image = when (data.type) {
+                                    NotificationType.Success -> successIcon
+                                    NotificationType.Error -> errorIcon
+                                    NotificationType.Warning -> warningIcon
+                                }
+                            ),
+                            contentDescription = data.type.name,
                             tint = Color.Unspecified,
                             modifier = Modifier.size(24.dp)
                         )

@@ -28,10 +28,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.models.outputs.currency.Currency
 import com.krushkov.virtualwallet.domain.models.outputs.wallet.Wallet
 import com.krushkov.virtualwallet.ui.core.Button
@@ -47,8 +49,12 @@ fun HeroWalletSection(
     onToggleAllWallets: (Boolean) -> Unit,
     onToggleEditingWallets: () -> Unit,
     onCancelEditingWallets: () -> Unit,
+    walletCount: Int,
+    cardCount: Int,
     onTopUpClick: () -> Unit,
+    onAddCardClick: () -> Unit,
     onMoveClick: () -> Unit,
+    onNewWalletClick: () -> Unit,
     onTransferClick: () -> Unit,
     currencies: Map<String, Currency> = emptyMap()
 ) {
@@ -64,7 +70,7 @@ fun HeroWalletSection(
         if (visible) {
             AllWalletsHeader(
                 isEditing = isEditingWallets,
-                onCloseClick = { 
+                onCloseClick = {
                     if (isEditingWallets) {
                         onCancelEditingWallets()
                     } else {
@@ -155,19 +161,35 @@ fun HeroWalletSection(
                     }.build()
                 }
 
-                IconTextButton(
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.AccountBalanceWallet,
-                            contentDescription = null,
-                            tint = CloudWhite
-                        )
-                    },
-                    text = "All Wallets",
-                    onClick = { onToggleAllWallets(true) },
-                    modifier = Modifier.fillMaxWidth(),
-                    containerColor = CyanNeon.copy(alpha = 0.5f)
-                )
+                if (walletCount <= 1) {
+                    IconTextButton(
+                        icon = {
+                            Icon(
+                                painter = rememberVectorPainter(image = addIcon),
+                                contentDescription = null,
+                                tint = Color.Unspecified
+                            )
+                        },
+                        text = stringResource(R.string.action_new_wallet),
+                        onClick = onNewWalletClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = CyanNeon.copy(alpha = 0.5f)
+                    )
+                } else {
+                    IconTextButton(
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.AccountBalanceWallet,
+                                contentDescription = null,
+                                tint = CloudWhite
+                            )
+                        },
+                        text = stringResource(R.string.action_all_wallets),
+                        onClick = { onToggleAllWallets(true) },
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = CyanNeon.copy(alpha = 0.5f)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -197,32 +219,50 @@ fun HeroWalletSection(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    IconTextButton(
-                        icon = {
-                            Icon(
-                                painter = rememberVectorPainter(image = addIcon),
-                                contentDescription = null,
-                                tint = Color.Unspecified
-                            )
-                        },
-                        text = "Add money",
-                        onClick = onTopUpClick,
-                        modifier = Modifier.weight(1f),
-                        containerColor = Green.copy(alpha = 0.5f)
-                    )
-                    IconTextButton(
-                        icon = {
-                            Icon(
-                                painter = rememberVectorPainter(image = moveIcon),
-                                contentDescription = null,
-                                tint = Color.Unspecified
-                            )
-                        },
-                        text = "Move",
-                        onClick = onMoveClick,
-                        modifier = Modifier.weight(0.75f),
-                        containerColor = CyanNeon.copy(alpha = 0.5f)
-                    )
+                    if (cardCount == 0) {
+                        IconTextButton(
+                            icon = {
+                                Icon(
+                                    painter = rememberVectorPainter(image = addIcon),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            },
+                            text = stringResource(R.string.action_add_card),
+                            onClick = onAddCardClick,
+                            modifier = Modifier.weight(1f),
+                            containerColor = Green.copy(alpha = 0.5f)
+                        )
+                    } else {
+                        IconTextButton(
+                            icon = {
+                                Icon(
+                                    painter = rememberVectorPainter(image = addIcon),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            },
+                            text = stringResource(R.string.action_add_money),
+                            onClick = onTopUpClick,
+                            modifier = Modifier.weight(1f),
+                            containerColor = Green.copy(alpha = 0.5f)
+                        )
+                    }
+                    if (walletCount > 1) {
+                        IconTextButton(
+                            icon = {
+                                Icon(
+                                    painter = rememberVectorPainter(image = moveIcon),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified
+                                )
+                            },
+                            text = stringResource(R.string.action_move),
+                            onClick = onMoveClick,
+                            modifier = Modifier.weight(0.75f),
+                            containerColor = CyanNeon.copy(alpha = 0.5f)
+                        )
+                    }
                     IconTextButton(
                         icon = {
                             Icon(
@@ -231,12 +271,13 @@ fun HeroWalletSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Transfer",
+                        text = stringResource(R.string.action_transfer),
                         onClick = onTransferClick,
                         modifier = Modifier.weight(0.9f),
                         containerColor = CyanNeon.copy(alpha = 0.5f)
                     )
                 }
+
             }
         }
     }
@@ -256,7 +297,7 @@ fun AllWalletsHeader(
         verticalArrangement = Arrangement.spacedBy(74.dp)
     ) {
         Text(
-            text = "All Wallets",
+            text = stringResource(R.string.title_all_wallets),
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Medium,
@@ -294,7 +335,7 @@ fun AllWalletsHeader(
                     icon = {
                         Icon(
                             painter = rememberVectorPainter(image = arrowBackIcon),
-                            contentDescription = "Back",
+                            contentDescription = null,
                             tint = Color.Unspecified,
                             modifier = Modifier.size(20.dp)
                         )
@@ -307,7 +348,7 @@ fun AllWalletsHeader(
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Close",
+                            contentDescription = null,
                             tint = CloudWhite,
                             modifier = Modifier.size(20.dp)
                         )
@@ -318,7 +359,7 @@ fun AllWalletsHeader(
             }
 
             Button(
-                text = if (isEditing) "Save" else "Edit",
+                text = if (isEditing) stringResource(R.string.action_save) else stringResource(R.string.action_edit),
                 onClick = onEditClick,
                 containerColor = if (isEditing) Green.copy(alpha = 0.5f) else CyanNeon.copy(alpha = 0.5f)
             )

@@ -1,11 +1,13 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.models.inputs.TransferInput
 import com.krushkov.virtualwallet.domain.models.outputs.wallet.Wallet
@@ -17,11 +19,13 @@ import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.MoveState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MoveViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle,
     private val walletRepository: WalletRepository,
     private val transferRepository: TransferRepository,
@@ -47,39 +51,99 @@ class MoveViewModel @Inject constructor(
                 val allWalletsResult = walletRepository.getMyAll()
 
                 if (walletResult is AppResult.Success) {
-                    state = state.copy(fromWallet = walletResult.data)
-                    resolveSymbol(walletResult.data)
+                    val wallet = walletResult.data
+                    val code = wallet.currencyCode ?: wallet.currency?.code
+                    state = state.copy(fromWallet = wallet, selectedCurrencyCode = code)
+                    code?.let { resolveSymbolForCode(it) }
                 }
 
                 if (allWalletsResult is AppResult.Success) {
-                    val others = allWalletsResult.data.filter { it.id != sourceWalletId }
-                    state = state.copy(
-                        wallets = others,
-                        selectedToWallet = others.firstOrNull { it.isDefault } ?: others.firstOrNull()
-                    )
+                    val all = allWalletsResult.data
+                    val defaultTo = all.firstOrNull { it.id != sourceWalletId && it.isDefault }
+                        ?: all.firstOrNull { it.id != sourceWalletId }
+                    state = state.copy(wallets = all, selectedToWallet = defaultTo)
                 }
             } catch (e: Exception) {
-                notificationManager.showError("Failed to load wallets")
+                notificationManager.showError(context.getString(R.string.msg_failed_load_wallets))
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private suspend fun resolveSymbol(wallet: Wallet) {
-        val direct = wallet.currency?.symbol
-        if (direct != null) {
-            state = state.copy(currencySymbol = direct)
+    private suspend fun resolveSymbolForCode(code: String) {
+        val walletWithCode = state.wallets.firstOrNull {
+            it.currencyCode == code || it.currency?.code == code
+        }
+        val directSymbol = walletWithCode?.currency?.symbol
+        if (directSymbol != null) {
+            state = state.copy(currencySymbol = directSymbol)
             return
         }
-        val code = wallet.currencyCode ?: return
         when (val result = currencyRepository.getByCode(code)) {
             is AppResult.Success -> state = state.copy(currencySymbol = result.data.symbol)
             is AppResult.Error -> {}
         }
     }
 
+    fun selectCurrency(code: String) {
+        state = state.copy(selectedCurrencyCode = code)
+        viewModelScope.launch { resolveSymbolForCode(code) }
+    }
+
+    fun selectFromWallet(wallet: Wallet) {
+        val newCode = wallet.currencyCode ?: wallet.currency?.code
+        if (state.selectedToWallet?.id == wallet.id) {
+            val newFrom = state.selectedToWallet!!
+            val newTo = state.fromWallet
+            val fromCode = newFrom.currencyCode ?: newFrom.currency?.code
+            state = state.copy(
+                fromWallet = newFrom,
+                selectedToWallet = newTo,
+                selectedCurrencyCode = fromCode,
+                isFromDropdownExpanded = false
+            )
+            fromCode?.let { viewModelScope.launch { resolveSymbolForCode(it) } }
+        } else {
+            state = state.copy(
+                fromWallet = wallet,
+                selectedCurrencyCode = newCode,
+                isFromDropdownExpanded = false
+            )
+            newCode?.let { viewModelScope.launch { resolveSymbolForCode(it) } }
+        }
+    }
+
+    fun toggleFromDropdown(expanded: Boolean) {
+        state = state.copy(isFromDropdownExpanded = expanded)
+    }
+
+    fun switchWallets() {
+        val from = state.fromWallet ?: return
+        val to = state.selectedToWallet ?: return
+        val newFromCode = to.currencyCode ?: to.currency?.code
+        state = state.copy(
+            fromWallet = to,
+            selectedToWallet = from,
+            selectedCurrencyCode = newFromCode
+        )
+        newFromCode?.let { viewModelScope.launch { resolveSymbolForCode(it) } }
+    }
+
     fun selectToWallet(wallet: Wallet) {
-        state = state.copy(selectedToWallet = wallet, isDropdownExpanded = false)
+        if (state.fromWallet?.id == wallet.id) {
+            val newFrom = state.selectedToWallet ?: return
+            val newTo = state.fromWallet
+            val fromCode = newFrom.currencyCode ?: newFrom.currency?.code
+            state = state.copy(
+                fromWallet = newFrom,
+                selectedToWallet = newTo,
+                selectedCurrencyCode = fromCode,
+                isDropdownExpanded = false
+            )
+            fromCode?.let { viewModelScope.launch { resolveSymbolForCode(it) } }
+        } else {
+            state = state.copy(selectedToWallet = wallet, isDropdownExpanded = false)
+        }
     }
 
     fun toggleDropdown(expanded: Boolean) {
@@ -102,10 +166,13 @@ class MoveViewModel @Inject constructor(
                     state = state.copy(isSubmitLoading = false)
                     return@launch
                 }
-                val currencyCode = fromWallet.currencyCode ?: fromWallet.currency?.code ?: run {
-                    state = state.copy(isSubmitLoading = false)
-                    return@launch
-                }
+                val currencyCode = state.selectedCurrencyCode
+                    ?: fromWallet.currencyCode
+                    ?: fromWallet.currency?.code
+                    ?: run {
+                        state = state.copy(isSubmitLoading = false)
+                        return@launch
+                    }
                 val toWallet = state.selectedToWallet ?: run {
                     state = state.copy(isSubmitLoading = false)
                     return@launch
@@ -125,7 +192,7 @@ class MoveViewModel @Inject constructor(
                     )
                 )) {
                     is AppResult.Success -> {
-                        notificationManager.showSuccess(result.message ?: "Funds moved successfully!")
+                        notificationManager.showSuccess(result.message ?: context.getString(R.string.msg_funds_moved))
                         state = state.copy(isSubmitLoading = false, isSuccess = true)
                     }
                     is AppResult.Error -> {
@@ -134,7 +201,7 @@ class MoveViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                notificationManager.showError("Something went wrong")
+                notificationManager.showError(context.getString(R.string.msg_something_went_wrong))
                 state = state.copy(isSubmitLoading = false)
             }
         }

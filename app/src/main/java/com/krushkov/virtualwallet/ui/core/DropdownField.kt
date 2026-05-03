@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -91,13 +93,13 @@ fun DropdownField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                AutoSizeDropdownText(
                     text = value.ifBlank { placeholder },
                     color = if (value.isBlank()) CloudWhite.copy(alpha = 0.5f) else CloudWhite,
-                    fontSize = 16.sp
+                    modifier = Modifier.weight(1f)
                 )
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -136,4 +138,29 @@ fun DropdownField(
             }
         }
     }
+}
+
+@Composable
+private fun AutoSizeDropdownText(
+    text: String,
+    color: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier,
+    maxFontSize: TextUnit = 16.sp,
+    minFontSize: TextUnit = 10.sp
+) {
+    var fontSize by remember(text, maxFontSize) { mutableStateOf(maxFontSize) }
+
+    Text(
+        text = text,
+        color = color,
+        fontSize = fontSize,
+        maxLines = 1,
+        softWrap = false,
+        onTextLayout = { result ->
+            if (result.hasVisualOverflow && fontSize.value > minFontSize.value) {
+                fontSize = (fontSize.value - 0.5f).coerceAtLeast(minFontSize.value).sp
+            }
+        },
+        modifier = modifier
+    )
 }

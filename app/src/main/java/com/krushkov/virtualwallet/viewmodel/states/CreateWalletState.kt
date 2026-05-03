@@ -6,6 +6,7 @@ data class CreateWalletState(
     val name: String = "",
     val selectedCurrency: Currency? = null,
     val makeDefault: Boolean = false,
+    val hasWallets: Boolean = false,
     val currencies: List<Currency> = emptyList(),
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,

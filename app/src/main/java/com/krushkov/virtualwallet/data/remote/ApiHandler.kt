@@ -19,6 +19,11 @@ object ApiHandler {
             val response = apiCall()
             val body = response.body()
 
+            if (response.isSuccessful && body == null) {
+                @Suppress("UNCHECKED_CAST")
+                return AppResult.Success(Unit as T, null)
+            }
+
             if (response.isSuccessful && body != null) {
                 if (body.success) {
                     val data = body.data

@@ -1,15 +1,18 @@
 package com.krushkov.virtualwallet.data.api.interfaces
 
 import com.krushkov.virtualwallet.data.dtos.request.wallet.WalletCreateRequest
+import com.krushkov.virtualwallet.data.dtos.request.wallet.WalletUpdateRequest
 import com.krushkov.virtualwallet.data.dtos.response.api.ApiResponse
 import com.krushkov.virtualwallet.data.dtos.response.api.PageResponse
 import com.krushkov.virtualwallet.data.dtos.response.wallet.WalletLongResponse
 import com.krushkov.virtualwallet.data.dtos.response.wallet.WalletShortResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -34,6 +37,16 @@ interface WalletApi {
 
     @PATCH("/api/wallets/{targetWalletId}/set-default")
     suspend fun setDefault(@Path("targetWalletId") targetWalletId: Long):
+            Response<ApiResponse<Unit>>
+
+    @PUT("/api/wallets/{targetWalletId}")
+    suspend fun update(
+        @Path("targetWalletId") targetWalletId: Long,
+        @Body request: WalletUpdateRequest
+    ): Response<ApiResponse<WalletLongResponse>>
+
+    @DELETE("/api/wallets/{targetWalletId}")
+    suspend fun delete(@Path("targetWalletId") targetWalletId: Long):
             Response<ApiResponse<Unit>>
 
 }

@@ -23,10 +23,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.domain.models.outputs.card.Card
 import com.krushkov.virtualwallet.domain.models.outputs.card.CardStatus
+import com.krushkov.virtualwallet.ui.core.Button
 import com.krushkov.virtualwallet.ui.core.IconTextButton
 import com.krushkov.virtualwallet.ui.theme.CloudWhite
 import com.krushkov.virtualwallet.ui.theme.CyanNeon
@@ -55,9 +58,162 @@ fun CardsHeroSection(
         }
     }
 
+    val addCardIcon = remember {
+        ImageVector.Builder(
+            name = "AddCard",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Miter
+        ) {
+            moveTo(3f, 8f)
+            horizontalLineTo(13f)
+            moveTo(8f, 3f)
+            verticalLineTo(13f)
+        }.build()
+    }
+
+    val removeIcon = remember {
+        ImageVector.Builder(
+            name = "Remove",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Miter
+        ) {
+            moveTo(3f, 8f)
+            horizontalLineTo(13f)
+        }.build()
+    }
+
+    val topUpIcon = remember {
+        ImageVector.Builder(
+            name = "TopUp",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Miter
+        ) {
+            moveTo(2f, 12.9999f)
+            horizontalLineTo(14f)
+            moveTo(2f, 13.9999f)
+            horizontalLineTo(14f)
+            moveTo(7.97856f, 13.957f)
+            lineTo(7.97856f, 2.95703f)
+            moveTo(11.5f, 6.22849f)
+            lineTo(7.97856f, 2.70703f)
+            lineTo(4.45708f, 6.22849f)
+        }.build()
+    }
+
+    val activateIcon = remember {
+        ImageVector.Builder(
+            name = "Activate",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Round
+        ) {
+            moveTo(11.5f, 8f)
+            lineTo(5.5f, 4.5f)
+            verticalLineTo(11.5f)
+            lineTo(11.5f, 8f)
+            close()
+        }.build()
+    }
+
+    val deactivateIcon = remember {
+        ImageVector.Builder(
+            name = "Deactivate",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Round
+        ) {
+            moveTo(4.5f, 4.5f)
+            horizontalLineTo(6.5f)
+            verticalLineTo(11.5f)
+            horizontalLineTo(4.5f)
+            verticalLineTo(4.5f)
+            close()
+        }.path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Round
+        ) {
+            moveTo(9.5f, 4.5f)
+            horizontalLineTo(11.5f)
+            verticalLineTo(11.5f)
+            horizontalLineTo(9.5f)
+            verticalLineTo(4.5f)
+            close()
+        }.build()
+    }
+
+    val restrictedIcon = remember {
+        ImageVector.Builder(
+            name = "Restricted",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).path(
+            stroke = SolidColor(Color.White),
+            strokeLineWidth = 1f,
+            strokeLineCap = StrokeCap.Butt,
+            strokeLineJoin = StrokeJoin.Miter
+        ) {
+            moveTo(10.5f, 7f)
+            verticalLineTo(4f)
+            curveTo(10.5f, 2.61929f, 9.38071f, 1.5f, 8f, 1.5f)
+            curveTo(6.61929f, 1.5f, 5.5f, 2.61929f, 5.5f, 4f)
+            verticalLineTo(7f)
+            moveTo(8f, 10f)
+            curveTo(7.72386f, 10f, 7.5f, 10.2239f, 7.5f, 10.5f)
+            curveTo(7.5f, 10.7761f, 7.72386f, 11f, 8f, 11f)
+            curveTo(8.27614f, 11f, 8.5f, 10.7761f, 8.5f, 10.5f)
+            curveTo(8.5f, 10.2239f, 8.27614f, 10f, 8f, 10f)
+            close()
+            moveTo(8f, 10f)
+            verticalLineTo(12.5f)
+            moveTo(3.5f, 7.5f)
+            horizontalLineTo(12.5f)
+            verticalLineTo(14.5f)
+            horizontalLineTo(3.5f)
+            verticalLineTo(7.5f)
+            close()
+        }.build()
+    }
+
     Column {
         Text(
-            text = "Cards",
+            text = stringResource(R.string.title_cards),
             color = CloudWhite,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
@@ -85,7 +241,6 @@ fun CardsHeroSection(
             Box(
                 modifier = Modifier.fillMaxWidth().padding(24.dp, 0.dp),
                 contentAlignment = Alignment.Center
-
             ) {
                 CardItem(
                     card = card,
@@ -103,159 +258,6 @@ fun CardsHeroSection(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        val addCardIcon = remember {
-            ImageVector.Builder(
-                name = "AddCard",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Miter
-            ) {
-                moveTo(3f, 8f)
-                horizontalLineTo(13f)
-                moveTo(8f, 3f)
-                verticalLineTo(13f)
-            }.build()
-        }
-
-        val removeIcon = remember {
-            ImageVector.Builder(
-                name = "Remove",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Miter
-            ) {
-                moveTo(3f, 8f)
-                horizontalLineTo(13f)
-            }.build()
-        }
-
-        val topUpIcon = remember {
-            ImageVector.Builder(
-                name = "TopUp",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Miter
-            ) {
-                moveTo(2f, 12.9999f)
-                horizontalLineTo(14f)
-                moveTo(2f, 13.9999f)
-                horizontalLineTo(14f)
-                moveTo(7.97856f, 13.957f)
-                lineTo(7.97856f, 2.95703f)
-                moveTo(11.5f, 6.22849f)
-                lineTo(7.97856f, 2.70703f)
-                lineTo(4.45708f, 6.22849f)
-            }.build()
-        }
-
-        val activateIcon = remember {
-            ImageVector.Builder(
-                name = "Activate",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Round
-            ) {
-                moveTo(11.5f, 8f)
-                lineTo(5.5f, 4.5f)
-                verticalLineTo(11.5f)
-                lineTo(11.5f, 8f)
-                close()
-            }.build()
-        }
-
-        val deactivateIcon = remember {
-            ImageVector.Builder(
-                name = "Deactivate",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Round
-            ) {
-                moveTo(4.5f, 4.5f)
-                horizontalLineTo(6.5f)
-                verticalLineTo(11.5f)
-                horizontalLineTo(4.5f)
-                verticalLineTo(4.5f)
-                close()
-            }.path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Round
-            ) {
-                moveTo(9.5f, 4.5f)
-                horizontalLineTo(11.5f)
-                verticalLineTo(11.5f)
-                horizontalLineTo(9.5f)
-                verticalLineTo(4.5f)
-                close()
-            }.build()
-        }
-
-        val restrictedIcon = remember {
-            ImageVector.Builder(
-                name = "Restricted",
-                defaultWidth = 24.dp,
-                defaultHeight = 24.dp,
-                viewportWidth = 16f,
-                viewportHeight = 16f
-            ).path(
-                stroke = SolidColor(Color.White),
-                strokeLineWidth = 1f,
-                strokeLineCap = StrokeCap.Butt,
-                strokeLineJoin = StrokeJoin.Miter
-            ) {
-                moveTo(10.5f, 7f)
-                verticalLineTo(4f)
-                curveTo(10.5f, 2.61929f, 9.38071f, 1.5f, 8f, 1.5f)
-                curveTo(6.61929f, 1.5f, 5.5f, 2.61929f, 5.5f, 4f)
-                verticalLineTo(7f)
-                moveTo(8f, 10f)
-                curveTo(7.72386f, 10f, 7.5f, 10.2239f, 7.5f, 10.5f)
-                curveTo(7.5f, 10.7761f, 7.72386f, 11f, 8f, 11f)
-                curveTo(8.27614f, 11f, 8.5f, 10.7761f, 8.5f, 10.5f)
-                curveTo(8.5f, 10.2239f, 8.27614f, 10f, 8f, 10f)
-                close()
-                moveTo(8f, 10f)
-                verticalLineTo(12.5f)
-                moveTo(3.5f, 7.5f)
-                horizontalLineTo(12.5f)
-                verticalLineTo(14.5f)
-                horizontalLineTo(3.5f)
-                verticalLineTo(7.5f)
-                close()
-            }.build()
-        }
-
         val isTopUpDisabled = selectedCard?.status == CardStatus.USER_DEACTIVATED ||
                 selectedCard?.status == CardStatus.ADMIN_DEACTIVATED
 
@@ -267,7 +269,7 @@ fun CardsHeroSection(
                     tint = Color.Unspecified
                 )
             },
-            text = "Add Card",
+            text = stringResource(R.string.action_add_card),
             onClick = onAddCardClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -294,7 +296,7 @@ fun CardsHeroSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Top-up",
+                        text = stringResource(R.string.action_topup),
                         onClick = {},
                         modifier = Modifier.weight(1f),
                         enabled = false
@@ -308,7 +310,7 @@ fun CardsHeroSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Top-up",
+                        text = stringResource(R.string.action_topup),
                         onClick = onTopUpClick,
                         modifier = Modifier.weight(0.8f),
                         containerColor = Green.copy(alpha = 0.5f)
@@ -324,7 +326,7 @@ fun CardsHeroSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Deactivate",
+                        text = stringResource(R.string.action_deactivate),
                         onClick = onCardStatusActionClick,
                         modifier = Modifier.weight(1f),
                         containerColor = CyanNeon.copy(alpha = 0.5f)
@@ -338,7 +340,7 @@ fun CardsHeroSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Activate",
+                        text = stringResource(R.string.action_activate),
                         onClick = onCardStatusActionClick,
                         modifier = Modifier.weight(1f),
                         containerColor = CyanNeon.copy(alpha = 0.5f)
@@ -352,7 +354,7 @@ fun CardsHeroSection(
                                 tint = Color.Unspecified
                             )
                         },
-                        text = "Restricted",
+                        text = stringResource(R.string.action_restricted),
                         onClick = {},
                         modifier = Modifier.weight(1f),
                         enabled = false
@@ -369,12 +371,13 @@ fun CardsHeroSection(
                             tint = Color.Unspecified
                         )
                     },
-                    text = "Remove",
+                    text = stringResource(R.string.action_remove),
                     onClick = onRemoveClick,
                     modifier = Modifier.weight(0.9f),
                     containerColor = Red.copy(alpha = 0.5f)
                 )
             }
+
         }
     }
 }

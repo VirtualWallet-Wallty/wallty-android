@@ -1,0 +1,190 @@
+<resources>
+    <string name="app_name">Wallty</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Начало</string>
+    <string name="nav_cards">Карти</string>
+    <string name="nav_transactions">Транзакции</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- Auth -->
+    <string name="login_title">Вход</string>
+    <string name="register_title">Регистрация</string>
+    <string name="label_email_or_username">Имейл или потребителско име</string>
+    <string name="label_password">Парола</string>
+    <string name="action_login">Вход</string>
+    <string name="action_register">Регистрация</string>
+    <string name="label_username">Потребителско име</string>
+    <string name="label_email">Имейл</string>
+    <string name="label_first_name">Собствено Име</string>
+    <string name="label_last_name">Фамилия</string>
+    <string name="link_back_to_login">Обратно към вход</string>
+    <string name="link_no_account_register">Нямате акаунт? Регистрирайте се</string>
+
+    <!-- Common actions -->
+    <string name="action_see_all">Виж всички</string>
+    <string name="action_new_wallet">Нов портфейл</string>
+    <string name="action_all_wallets">Всички портфейли</string>
+    <string name="action_add_card">Добави карта</string>
+    <string name="action_add_money">Добави пари</string>
+    <string name="action_move">Прехвърли</string>
+    <string name="action_transfer">Превод</string>
+    <string name="action_save">Запази</string>
+    <string name="action_edit">Редактирай</string>
+    <string name="action_default">По подразбиране</string>
+    <string name="action_create">Създай</string>
+    <string name="action_confirm">Потвърди</string>
+    <string name="action_cancel">Отказ</string>
+    <string name="action_add">Добави</string>
+    <string name="action_accept">Приеми</string>
+    <string name="action_logout">Изход</string>
+    <string name="action_ok">OK</string>
+    <string name="action_receive">Получи</string>
+    <string name="action_send">Изпрати</string>
+
+    <!-- Home -->
+    <string name="title_latest_transactions">Последни транзакции</string>
+    <string name="msg_no_transactions">Все още няма транзакции за този портфейл.</string>
+
+    <!-- Wallet -->
+    <string name="title_all_wallets">Всички портфейли</string>
+    <string name="title_new_wallet">Нов портфейл</string>
+    <string name="subtitle_new_wallet">Персонализирайте управлението на вашия портфейл</string>
+    <string name="label_wallet_details">Детайли за портфейла</string>
+    <string name="label_wallet_name">Иmе на портфейла</string>
+    <string name="label_currency">Валута</string>
+    <string name="label_select_currency">Изберете валута</string>
+    <string name="label_set_as_default">Задай по подразбиране</string>
+
+    <!-- Cards -->
+    <string name="title_cards">Карти</string>
+    <string name="title_latest_topups">Последни захранвания</string>
+    <string name="title_new_card">Нова карта</string>
+    <string name="subtitle_new_card">Добавете своята платежна карта</string>
+    <string name="label_card_details">Детайли за картата</string>
+    <string name="label_card_holder">Притежател на картата</string>
+    <string name="label_card_number">Номер на картата</string>
+    <string name="label_expiration">Изтичане</string>
+    <string name="label_month">Месец</string>
+    <string name="label_year">Година</string>
+    <string name="action_topup">Захранване</string>
+    <string name="action_deactivate">Деактивирай</string>
+    <string name="action_activate">Активирай</string>
+    <string name="action_restricted">Ограничен</string>
+    <string name="action_remove">Премахни</string>
+    <string name="msg_no_topups">Няма скорошни захранвания за картите ви.</string>
+    <string name="dialog_confirm_deactivation">Потвърждавате ли деактивирането на тази карта?</string>
+    <string name="dialog_confirm_activation">Потвърждавате ли активирането на тази карта?</string>
+
+    <!-- Transactions -->
+    <string name="title_all_transactions">Всички транзакции</string>
+    <string name="label_filters">Филтри</string>
+    <string name="action_clear_filters">Изчисти филтрите</string>
+    <string name="label_direction">Посока</string>
+    <string name="label_direction_all">Всички</string>
+    <string name="label_direction_sent">Изпратени</string>
+    <string name="label_direction_received">Получени</string>
+    <string name="label_type">Тип</string>
+    <string name="label_type_all">Всички</string>
+    <string name="label_type_transfer">Превод</string>
+    <string name="label_type_topup">Захранване</string>
+    <string name="label_type_payment">Плащане</string>
+    <string name="label_sort">Сортиране</string>
+    <string name="label_sort_newest">Най-нови</string>
+    <string name="label_sort_oldest">Най-стари</string>
+    <string name="label_sort_highest">Най-високи</string>
+    <string name="label_sort_lowest">Най-ниски</string>
+    <string name="label_from">От</string>
+    <string name="label_to">До</string>
+    <string name="label_any_date">Всякаква дата</string>
+    <string name="label_wallet">Портфейл</string>
+    <string name="label_card">Карта</string>
+    <string name="label_all_cards">Всички карти</string>
+    <string name="label_select_wallet">Изберете портфейл</string>
+    <string name="msg_no_transactions_found">Няма намерени транзакции.</string>
+
+    <!-- Transaction Detail -->
+    <string name="title_transaction_details">Детайли за транзакцията</string>
+    <string name="detail_label">Описание</string>
+    <string name="detail_date">Дата</string>
+    <string name="detail_type">Тип</string>
+    <string name="detail_note">Бележка</string>
+    <string name="detail_reference">Референция</string>
+    <string name="label_system">Системна</string>
+    <string name="label_unknown">Неизвестен</string>
+
+    <!-- Move -->
+    <string name="title_move">Прехвърляне</string>
+    <string name="subtitle_move">Прехвърлете средства между вашите портфейли</string>
+
+    <!-- Top Up -->
+    <string name="title_top_up">Захранване</string>
+    <string name="subtitle_top_up_wallet">Добавете средства към вашия портфейл</string>
+    <string name="subtitle_top_up_card">Изберете портфейл за получаване на средства</string>
+    <string name="label_pay_with">Плати с</string>
+    <string name="label_select_card">Изберете карта</string>
+    <string name="label_to_wallet">Към портфейл</string>
+
+    <!-- Transfer -->
+    <string name="title_receive_money">Получаване на пари</string>
+    <string name="subtitle_receive_money">Покажете този QR код на изпращача</string>
+    <string name="title_send_transfer">Изпрати превод</string>
+    <string name="subtitle_send_transfer">Потвърдете данните по-долу</string>
+    <string name="msg_camera_permission">Необходимо е разрешение за камера\nза сканиране на QR кодове</string>
+    <string name="msg_point_camera">Насочете камерата към QR код</string>
+    <string name="msg_no_wallets">Няма налични портфейли</string>
+    <string name="msg_qr_unavailable">Не може да се генерира QR — информацията за собственика не е налична</string>
+
+    <!-- Settings -->
+    <string name="title_settings">Настройки</string>
+    <string name="label_language">Език</string>
+    <string name="label_english">Английски</string>
+    <string name="label_bulgarian">Български</string>
+
+    <!-- Notifications (ViewModel messages) -->
+    <string name="msg_session_expired">Сесията е изтекла</string>
+    <string name="msg_registration_successful">Успешна регистрация!</string>
+    <string name="msg_changes_saved">Промените са запазени</string>
+    <string name="msg_wallet_deleted">Портфейлът е изтрит</string>
+    <string name="msg_failed_load_currencies">Неуспешно зареждане на валути</string>
+    <string name="msg_wallet_name_empty">Името на портфейла не може да бъде празно</string>
+    <string name="msg_wallet_created">Портфейлът е създаден успешно</string>
+    <string name="msg_failed_create_wallet">Неуспешно създаване на портфейл</string>
+    <string name="msg_card_fields_required">Всички полета са задължителни</string>
+    <string name="msg_card_added">Картата е добавена успешно</string>
+    <string name="msg_card_deactivated">Картата е деактивирана успешно</string>
+    <string name="msg_card_activated">Картата е активирана успешно</string>
+    <string name="msg_card_removed">Картата е премахната успешно</string>
+    <string name="msg_click_again_confirm">Моля кликнете повторно, за да потвърдите</string>
+    <string name="msg_topup_successful">Успешно захранване!</string>
+    <string name="msg_transfer_sent">Преводът е изпратен успешно!</string>
+    <string name="msg_failed_load_recipient">Неуспешно зареждане на информация за получателя</string>
+    <string name="msg_failed_load_wallets">Неуспешно зареждане на портфейли</string>
+    <string name="msg_funds_moved">Средствата са прехвърлени успешно!</string>
+    <string name="msg_failed_load_transactions">Неуспешно зареждане на транзакции</string>
+    <string name="msg_something_went_wrong">Нещо се обърка</string>
+    <string name="msg_payment_successful">Плащането е успешно!</string>
+
+    <!-- NFC / Pay Mode -->
+    <string name="action_pay_mode_on">Активирай Pay Mode</string>
+    <string name="action_pay_mode_off">Pay Mode активен</string>
+    <string name="label_pay_mode">Pay Mode</string>
+    <string name="action_pay">Плати</string>
+    <string name="action_start_payment">Стартирай плащане</string>
+    <string name="action_new_request">Нова заявка</string>
+    <string name="title_payment_request">Заявка за плащане</string>
+    <string name="title_pos_terminal">POS Терминал</string>
+    <string name="subtitle_pos_terminal">Въведи сума и докосни телефона на клиента</string>
+    <string name="label_currency_code">Код на валута</string>
+    <string name="label_merchant_reference">Референция</string>
+    <string name="detail_label_from">От портфейл</string>
+    <string name="msg_nfc_unavailable">NFC не е налично на това устройство</string>
+    <string name="msg_pos_enter_amount">Въведи сума за начало</string>
+    <string name="msg_pos_waiting">Изчаква клиентът да докосне…</string>
+    <string name="msg_pos_sent">Заявката за плащане е изпратена!</string>
+    <string name="msg_pos_error">Неуспешно изпращане — опитай отново</string>
+    <string name="hce_service_description">Wallty NFC плащане</string>
+    <string name="hce_aid_description">Wallty Payment AID</string>
+    <string name="label_amount">Сума</string>
+    <string name="action_back">Назад</string>
+</resources>

@@ -1,10 +1,12 @@
 package com.krushkov.virtualwallet.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.data.api.SessionManager
 import com.krushkov.virtualwallet.domain.error.getMessage
 import com.krushkov.virtualwallet.domain.repositories.AuthRepository
@@ -12,11 +14,13 @@ import com.krushkov.virtualwallet.domain.result.fold
 import com.krushkov.virtualwallet.ui.utils.NotificationManager
 import com.krushkov.virtualwallet.viewmodel.states.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val authRepository: AuthRepository,
     private val notificationManager: NotificationManager
 ) : ViewModel() {
@@ -61,7 +65,7 @@ class AuthViewModel @Inject constructor(
             user = null
         )
         viewModelScope.launch {
-            notificationManager.showError("Session expired")
+            notificationManager.showError(context.getString(R.string.msg_session_expired))
         }
     }
 
@@ -108,7 +112,7 @@ class AuthViewModel @Inject constructor(
                         isRegistered = true
                     )
                     viewModelScope.launch {
-                        notificationManager.showSuccess("Registration successful!")
+                        notificationManager.showSuccess(context.getString(R.string.msg_registration_successful))
                     }
                 },
                 onError = {

@@ -1,3 +1,190 @@
 <resources>
-    <string name="app_name">virtual-wallet</string>
+    <string name="app_name">Wallty</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_cards">Cards</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Auth -->
+    <string name="login_title">Login</string>
+    <string name="register_title">Register</string>
+    <string name="label_email_or_username">Email or Username</string>
+    <string name="label_password">Password</string>
+    <string name="action_login">Login</string>
+    <string name="action_register">Register</string>
+    <string name="label_username">Username</string>
+    <string name="label_email">Email</string>
+    <string name="label_first_name">First Name</string>
+    <string name="label_last_name">Last Name</string>
+    <string name="link_back_to_login">Back to login</string>
+    <string name="link_no_account_register">Don\'t have an account? Register</string>
+
+    <!-- Common actions -->
+    <string name="action_see_all">See All</string>
+    <string name="action_new_wallet">New Wallet</string>
+    <string name="action_all_wallets">All Wallets</string>
+    <string name="action_add_card">Add Card</string>
+    <string name="action_add_money">Add money</string>
+    <string name="action_move">Move</string>
+    <string name="action_transfer">Transfer</string>
+    <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_default">Default</string>
+    <string name="action_create">Create</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_add">Add</string>
+    <string name="action_accept">Accept</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_ok">OK</string>
+    <string name="action_receive">Receive</string>
+    <string name="action_send">Send</string>
+
+    <!-- Home -->
+    <string name="title_latest_transactions">Latest transactions</string>
+    <string name="msg_no_transactions">No transactions yet for this wallet.</string>
+
+    <!-- Wallet -->
+    <string name="title_all_wallets">All Wallets</string>
+    <string name="title_new_wallet">New Wallet</string>
+    <string name="subtitle_new_wallet">Personalize your wallet management</string>
+    <string name="label_wallet_details">Wallet Details</string>
+    <string name="label_wallet_name">Wallet Name</string>
+    <string name="label_currency">Currency</string>
+    <string name="label_select_currency">Select Currency</string>
+    <string name="label_set_as_default">Set as Default</string>
+
+    <!-- Cards -->
+    <string name="title_cards">Cards</string>
+    <string name="title_latest_topups">Latest Top-ups</string>
+    <string name="title_new_card">New Card</string>
+    <string name="subtitle_new_card">Add your payment card</string>
+    <string name="label_card_details">Card Details</string>
+    <string name="label_card_holder">Card Holder</string>
+    <string name="label_card_number">Card Number</string>
+    <string name="label_expiration">Expiration</string>
+    <string name="label_month">Month</string>
+    <string name="label_year">Year</string>
+    <string name="action_topup">Top-up</string>
+    <string name="action_deactivate">Deactivate</string>
+    <string name="action_activate">Activate</string>
+    <string name="action_restricted">Restricted</string>
+    <string name="action_remove">Remove</string>
+    <string name="msg_no_topups">No recent top-ups for your cards.</string>
+    <string name="dialog_confirm_deactivation">Do you confirm deactivation for this card?</string>
+    <string name="dialog_confirm_activation">Do you confirm activation for this card?</string>
+
+    <!-- Transactions -->
+    <string name="title_all_transactions">All Transactions</string>
+    <string name="label_filters">Filters</string>
+    <string name="action_clear_filters">Clear filters</string>
+    <string name="label_direction">Direction</string>
+    <string name="label_direction_all">All</string>
+    <string name="label_direction_sent">Sent</string>
+    <string name="label_direction_received">Received</string>
+    <string name="label_type">Type</string>
+    <string name="label_type_all">All</string>
+    <string name="label_type_transfer">Transfer</string>
+    <string name="label_type_topup">Top-Up</string>
+    <string name="label_type_payment">Payment</string>
+    <string name="label_sort">Sort</string>
+    <string name="label_sort_newest">Newest</string>
+    <string name="label_sort_oldest">Oldest</string>
+    <string name="label_sort_highest">Highest</string>
+    <string name="label_sort_lowest">Lowest</string>
+    <string name="label_from">From</string>
+    <string name="label_to">To</string>
+    <string name="label_any_date">Any date</string>
+    <string name="label_wallet">Wallet</string>
+    <string name="label_card">Card</string>
+    <string name="label_all_cards">All cards</string>
+    <string name="label_select_wallet">Select wallet</string>
+    <string name="msg_no_transactions_found">No transactions found.</string>
+
+    <!-- Transaction Detail -->
+    <string name="title_transaction_details">Transaction Details</string>
+    <string name="detail_label">Label</string>
+    <string name="detail_date">Date</string>
+    <string name="detail_type">Type</string>
+    <string name="detail_note">Note</string>
+    <string name="detail_reference">Reference</string>
+    <string name="label_system">System</string>
+    <string name="label_unknown">Unknown</string>
+
+    <!-- Move -->
+    <string name="title_move">Move</string>
+    <string name="subtitle_move">Move funds between your wallets</string>
+
+    <!-- Top Up -->
+    <string name="title_top_up">Top Up</string>
+    <string name="subtitle_top_up_wallet">Add funds to your wallet</string>
+    <string name="subtitle_top_up_card">Select a wallet to receive funds</string>
+    <string name="label_pay_with">Pay with</string>
+    <string name="label_select_card">Select card</string>
+    <string name="label_to_wallet">To wallet</string>
+
+    <!-- Transfer -->
+    <string name="title_receive_money">Receive Money</string>
+    <string name="subtitle_receive_money">Show this QR code to the sender</string>
+    <string name="title_send_transfer">Send Transfer</string>
+    <string name="subtitle_send_transfer">Confirm the details below</string>
+    <string name="msg_camera_permission">Camera permission is required\nto scan QR codes</string>
+    <string name="msg_point_camera">Point camera at QR code</string>
+    <string name="msg_no_wallets">No wallets available</string>
+    <string name="msg_qr_unavailable">Unable to generate QR — wallet owner info unavailable</string>
+
+    <!-- Settings -->
+    <string name="title_settings">Settings</string>
+    <string name="label_language">Language</string>
+    <string name="label_english">English</string>
+    <string name="label_bulgarian">Bulgarian</string>
+
+    <!-- Notifications (ViewModel messages) -->
+    <string name="msg_session_expired">Session expired</string>
+    <string name="msg_registration_successful">Registration successful!</string>
+    <string name="msg_changes_saved">Changes saved</string>
+    <string name="msg_wallet_deleted">Wallet deleted</string>
+    <string name="msg_failed_load_currencies">Failed to load currencies</string>
+    <string name="msg_wallet_name_empty">Wallet name cannot be empty</string>
+    <string name="msg_wallet_created">Wallet created successfully</string>
+    <string name="msg_failed_create_wallet">Failed to create wallet</string>
+    <string name="msg_card_fields_required">All fields are required</string>
+    <string name="msg_card_added">Card added successfully</string>
+    <string name="msg_card_deactivated">Card deactivated successfully</string>
+    <string name="msg_card_activated">Card activated successfully</string>
+    <string name="msg_card_removed">Card removed successfully</string>
+    <string name="msg_click_again_confirm">Please click again to confirm</string>
+    <string name="msg_topup_successful">Top-up successful!</string>
+    <string name="msg_transfer_sent">Transfer sent successfully!</string>
+    <string name="msg_failed_load_recipient">Failed to load recipient info</string>
+    <string name="msg_failed_load_wallets">Failed to load wallets</string>
+    <string name="msg_funds_moved">Funds moved successfully!</string>
+    <string name="msg_failed_load_transactions">Failed to load transactions</string>
+    <string name="msg_something_went_wrong">Something went wrong</string>
+    <string name="msg_payment_successful">Payment successful!</string>
+
+    <!-- NFC / Pay Mode -->
+    <string name="action_pay_mode_on">Enable Pay Mode</string>
+    <string name="action_pay_mode_off">Pay Mode Active</string>
+    <string name="label_pay_mode">Pay Mode</string>
+    <string name="action_pay">Pay</string>
+    <string name="action_start_payment">Start Payment</string>
+    <string name="action_new_request">New Request</string>
+    <string name="title_payment_request">Payment Request</string>
+    <string name="title_pos_terminal">POS Terminal</string>
+    <string name="subtitle_pos_terminal">Enter amount and tap a customer\'s phone</string>
+    <string name="label_currency_code">Currency Code</string>
+    <string name="label_merchant_reference">Reference</string>
+    <string name="detail_label_from">From wallet</string>
+    <string name="msg_nfc_unavailable">NFC is not available on this device</string>
+    <string name="msg_pos_enter_amount">Enter an amount to start</string>
+    <string name="msg_pos_waiting">Waiting for customer to tap…</string>
+    <string name="msg_pos_sent">Payment request sent!</string>
+    <string name="msg_pos_error">Failed to send — please try again</string>
+    <string name="hce_service_description">Wallty NFC Payment</string>
+    <string name="hce_aid_description">Wallty Payment AID</string>
+    <string name="label_amount">Amount</string>
+    <string name="action_back">Back</string>
 </resources>

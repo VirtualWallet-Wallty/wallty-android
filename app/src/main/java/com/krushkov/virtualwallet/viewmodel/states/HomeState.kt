@@ -9,10 +9,13 @@ data class HomeState(
     val currentUser: AuthUser? = null,
     val wallet: Wallet? = null,
     val wallets: List<Wallet> = emptyList(),
+    val cardCount: Int = 0,
     val transactions: List<Transaction> = emptyList(),
     val currencies: Map<String, Currency> = emptyMap(),
     val isAllWalletsVisible: Boolean = false,
     val isEditingWallets: Boolean = false,
     val pendingDefaultWalletId: Long? = null,
+    val editingWalletId: Long? = null,
+    val editingWalletName: String = "",
     val isLoading: Boolean = false
 )

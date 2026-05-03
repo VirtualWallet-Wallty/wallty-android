@@ -17,7 +17,35 @@ import androidx.compose.ui.unit.dp
 import com.krushkov.virtualwallet.ui.theme.*
 
 @Composable
-fun Background(modifier: Modifier = Modifier) {
+fun Background(
+    modifier: Modifier = Modifier,
+    style: AppBackgroundStyle = AppBackgroundStyle.Signature
+) {
+    when (style) {
+        is AppBackgroundStyle.Signature -> SignatureBackground(modifier)
+        is AppBackgroundStyle.Solid -> SolidBackground(modifier, style.color)
+    }
+}
+
+sealed interface AppBackgroundStyle {
+    data object Signature : AppBackgroundStyle
+    data class Solid(val color: Color = Black) : AppBackgroundStyle
+}
+
+@Composable
+private fun SolidBackground(
+    modifier: Modifier = Modifier,
+    color: Color = Black
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color)
+    )
+}
+
+@Composable
+private fun SignatureBackground(modifier: Modifier = Modifier) {
     val glowBlur = 60.dp
     val electricBlur = 30.dp
     val cyanMaxBlur = 40.dp

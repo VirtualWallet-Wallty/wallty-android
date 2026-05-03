@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,7 @@ import androidx.navigation.NavController
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
+import com.krushkov.virtualwallet.R
 import com.krushkov.virtualwallet.ui.core.CircleButton
 import com.krushkov.virtualwallet.ui.theme.AppCardShape
 import com.krushkov.virtualwallet.ui.theme.CloudWhite
@@ -75,14 +77,14 @@ fun ReceiveScreen(
         Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            text = "Receive Money",
+            text = stringResource(R.string.title_receive_money),
             color = CloudWhite,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Show this QR code to the sender",
+            text = stringResource(R.string.subtitle_receive_money),
             color = CloudWhite.copy(alpha = 0.6f),
             fontSize = 14.sp
         )
@@ -114,14 +116,14 @@ fun ReceiveScreen(
             }
         } else if (state.wallets.isEmpty() && !state.isLoading) {
             Text(
-                text = "No wallets available",
+                text = stringResource(R.string.msg_no_wallets),
                 color = CloudWhite.copy(alpha = 0.5f),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
         } else if (state.selectedWallet?.ownerId == null && state.selectedWallet?.owner == null) {
             Text(
-                text = "Unable to generate QR — wallet owner info unavailable",
+                text = stringResource(R.string.msg_qr_unavailable),
                 color = CloudWhite.copy(alpha = 0.5f),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
@@ -134,11 +136,7 @@ fun ReceiveScreen(
 
 private fun generateQrBitmap(content: String, size: Int): Bitmap {
     val hints = mapOf(EncodeHintType.MARGIN to 1)
-
-    val bitMatrix = MultiFormatWriter().encode(
-        content, BarcodeFormat.QR_CODE, size, size, hints
-    )
-
+    val bitMatrix = MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, size, size, hints)
     val bitmap = createBitmap(size, size, Bitmap.Config.RGB_565)
     for (x in 0 until size) {
         for (y in 0 until size) {
