@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krushkov.virtualwallet.domain.repositories.TransactionRepository
+import com.krushkov.virtualwallet.domain.repositories.WalletRepository
 import com.krushkov.virtualwallet.domain.result.AppResult
 import com.krushkov.virtualwallet.viewmodel.states.TransactionDetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val walletRepository: WalletRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(TransactionDetailsState(isLoading = true))
@@ -37,9 +39,23 @@ class TransactionDetailsViewModel @Inject constructor(
 
         viewModelScope.launch {
             state = state.copy(isLoading = true)
+            val walletsResult = walletRepository.getMyAll()
+            val ownedWalletIds = if (walletsResult is AppResult.Success) {
+                walletsResult.data.map { it.id }.toSet()
+            } else {
+                emptySet()
+            }
+
             state = when (val result = transactionRepository.getById(id)) {
-                is AppResult.Success -> state.copy(transaction = result.data, isLoading = false)
-                is AppResult.Error -> state.copy(isLoading = false)
+                is AppResult.Success -> state.copy(
+                    transaction = result.data,
+                    ownedWalletIds = ownedWalletIds,
+                    isLoading = false
+                )
+                is AppResult.Error -> state.copy(
+                    ownedWalletIds = ownedWalletIds,
+                    isLoading = false
+                )
             }
         }
     }
