@@ -34,8 +34,10 @@ import com.krushkov.virtualwallet.ui.core.CircleButton
 import com.krushkov.virtualwallet.ui.core.LoadingOverlay
 import com.krushkov.virtualwallet.ui.theme.CloudWhite
 import com.krushkov.virtualwallet.ui.theme.CyanNeon
-import com.krushkov.virtualwallet.ui.theme.Red
 import com.krushkov.virtualwallet.ui.utils.getFormattedDate
+import com.krushkov.virtualwallet.ui.utils.getUiColor
+import com.krushkov.virtualwallet.ui.utils.getUiSign
+import com.krushkov.virtualwallet.ui.utils.isIncoming
 import com.krushkov.virtualwallet.viewmodel.TransactionDetailsViewModel
 
 @Composable
@@ -85,32 +87,45 @@ fun TransactionDetailsScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        if (transaction == null) {
-            Text(
-                text = stringResource(R.string.msg_no_transactions_found),
-                color = CloudWhite.copy(alpha = 0.5f),
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 48.dp)
-            )
-            return
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            if (transaction == null) {
+                Text(
+                    text = stringResource(R.string.msg_no_transactions_found),
+                    color = CloudWhite.copy(alpha = 0.5f),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            } else {
+                TransactionDetailsContent(
+                    transaction = transaction,
+                    ownedWalletIds = state.ownedWalletIds
+                )
+            }
         }
-
-        TransactionDetailsContent(transaction)
     }
 }
 
 @Composable
-private fun TransactionDetailsContent(transaction: Transaction) {
-    val amount = transaction.recipientAmount
-    val currency = transaction.recipientCurrency?.symbol
-        ?: transaction.recipientCurrency?.code
+private fun TransactionDetailsContent(
+    transaction: Transaction,
+    ownedWalletIds: Set<Long>
+) {
+    val isIncoming = transaction.isIncoming(currentWalletId = null, ownedWalletIds = ownedWalletIds)
+    val sign = transaction.getUiSign(currentWalletId = null, ownedWalletIds = ownedWalletIds)
+    val color = transaction.getUiColor(currentWalletId = null, ownedWalletIds = ownedWalletIds)
+    val amount = if (isIncoming) transaction.recipientAmount else transaction.senderAmount
+    val currencyCode = if (isIncoming) {
+        transaction.recipientCurrency?.code ?: transaction.recipientCurrencyCode
+    } else {
+        transaction.senderCurrency?.code ?: transaction.senderCurrencyCode
+    } ?: transaction.recipientCurrency?.code
         ?: transaction.recipientCurrencyCode
-        ?: transaction.senderCurrency?.symbol
         ?: transaction.senderCurrency?.code
         ?: transaction.senderCurrencyCode
         ?: stringResource(R.string.label_unknown)
@@ -132,8 +147,8 @@ private fun TransactionDetailsContent(transaction: Transaction) {
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "$amount $currency",
-            color = Red,
+            text = "$sign$amount $currencyCode",
+            color = color,
             fontSize = 38.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -151,11 +166,11 @@ private fun TransactionDetailsContent(transaction: Transaction) {
             )
             DetailRow(
                 label = stringResource(R.string.label_amount),
-                value = amount.toString()
+                value = "$sign$amount"
             )
             DetailRow(
                 label = stringResource(R.string.label_currency),
-                value = currency
+                value = currencyCode
             )
             transaction.sender?.fullName()?.takeIf { it.isNotBlank() }?.let {
                 DetailRow(label = stringResource(R.string.label_from), value = it)
