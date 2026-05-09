@@ -34,7 +34,7 @@ git clone https://github.com/VirtualWallet-Wallty/android
 
 **Developed as a course project @ Technical University of Sofia**
 
-\*Faculty of Computer Systems and Technologies - Computer & Software Engineering\*\*\*
+*Faculty of Computer Systems and Technologies - Computer & Software Engineering*
 
 </div>
 
